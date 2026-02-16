@@ -1,17 +1,19 @@
-# ESNODE Sentinel | Source Available BUSL-1.1 | Copyright (c) 2025 Estimatedstocks AB
+# 🦅 Sentinel
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/sentinel-logo.png" alt="ESNODE Sentinel - The Sentience Layer for AI Infrastructure" width="600"/>
+  <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/sentinel-logo.png" alt="Sentinel Logo" width="600"/>
   
   <h3>The Sentience Layer for AI Infrastructure</h3>
   
+  **Stop observing. Start Sensing.** Sentinel is the first high-performance, **WASM-extensible** observability framework purpose-built for the scale, thermal complexity, and power-density of modern GPU clusters.
+
+  [**Explore the Docs**](docs/) • [**Join the Discord**](https://discord.gg/sentinel) • [**Build a Skill**](skills/README.md)
+
   [![License](https://img.shields.io/badge/License-BUSL--1.1-blue.svg)](LICENSE)
   [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ESNODE/sentinel)
   [![WASM Powered](https://img.shields.io/badge/Powered_by-WASM-purple.svg)](https://webassembly.org/)
   [![NVIDIA DGX Ready](https://img.shields.io/badge/NVIDIA-DGX_Ready-success)](https://www.nvidia.com/en-us/data-center/dgx-systems/)
-  [![Security](https://img.shields.io/badge/Security-Hardened-critical)](SECURITY.md)
-  
-  <p><i>The world's first power-aware, WASM-extensible observability sentinel for GPU clusters.</i></p>
+  [![Hype](https://img.shields.io/badge/Hype-Extreme-orange.svg)](#)
 </div>
 
 ---
@@ -29,16 +31,17 @@ ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-bui
 
 ---
 
-## 🚀 The Skills System (WASM-Ready)
+## 🧩 The WASM Skills Gallery
+Traditional agents are rigid. Sentinel is a living organism. Extensions are written in any language (Rust, Go, C++, Zig) and compiled to **WebAssembly**.
 
-Sentinel isn't just a tool; it's an extensible platform. Our **Skills System** allows you to adapt Sentinel to any environment.
+| Skill | Category | Capability | Viral Factor |
+| :--- | :--- | :--- | :--- |
+| **GPU-Sentience** | Core | NVML/ROCm Deep-packet telemetry. | **High** |
+| **Eco-Flow** | Energy | Real-time PUE & Token/Joule Efficiency. | **Hype** |
+| **IoT-Bridge** | Protocol | MQTT/DNP3 integration for Liquid Cooling. | **Essential** |
+| **Risk-Oracle** | AIOps | Predictive GPU Failure Scoring (0-100). | **Magic** |
 
-| Skill | Category | Description |
-| :--- | :--- | :--- |
-| **GPU Core** | Hardware | NVIDIA/AMD Deep telemetry (NVML/ROCm). |
-| **Energy** | Sustainability | Real-time PUE and token-per-watt metrics. |
-| **MQTT** | IoT/DCIM | Stream sensor data from Datacenter PDUs. |
-| **AIOps** | Intelligence | Autonomous preemption and risk scoring. |
+> **Contribute a Skill:** Get listed in the [Community Gallery](skills/COMMUNITY.md) and earn exclusive **Sentinel Sentinel** status.
 
 ---
 
