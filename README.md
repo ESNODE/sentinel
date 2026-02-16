@@ -13,6 +13,7 @@
   [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ESNODE/sentinel)
   [![WASM Powered](https://img.shields.io/badge/Powered_by-WASM-purple.svg)](https://webassembly.org/)
   [![NVIDIA DGX Ready](https://img.shields.io/badge/NVIDIA-DGX_Ready-success)](https://www.nvidia.com/en-us/data-center/dgx-systems/)
+  [![Go Support](https://img.shields.io/badge/Go-Ready-blue.svg)](https://go.dev/)
   [![Hype](https://img.shields.io/badge/Hype-Extreme-orange.svg)](#)
 </div>
 

@@ -75,6 +75,30 @@ Skills can report data back to Sentinel using these host-defined functions:
    cargo build --target wasm32-unknown-unknown --release
    ```
 
+## 🐹 Go Example (via TinyGo)
+
+1. Create `main.go`:
+   ```go
+   package main
+   import "unsafe"
+
+   //export report_metric
+   func report_metric(ptr uint32, len uint32, value float64)
+
+   //export collect
+   func collect() {
+       name := "pcie_bandwidth_util"
+       // Use unsafe to pass string pointers to host
+       report_metric(uint32(uintptr(unsafe.Pointer(unsafe.StringData(name)))), uint32(len(name)), 0.85)
+   }
+
+   func main() {}
+   ```
+2. Build for WASM using [TinyGo](https://tinygo.org/):
+   ```bash
+   tinygo build -o skill.wasm -target=wasi main.go
+   ```
+
 ---
 
 ## 🔧 Deploying Your Skill
