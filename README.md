@@ -29,7 +29,7 @@
 
   <h3>The "WASM Magic": Polyglot Extensibility</h3>
   <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/wasm-magic.png" alt="Sentinel WASM Magic" width="800"/>
-  <p><i>Build a Skill in Python (via Javy), JavaScript, or Rust. Compile to WASM and see it live instantly.</i></p>
+  <p><i>Build a Skill in <b>Python, JavaScript, TypeScript, Rust, Go, C++, C#, Java</b>, or <b>Kotlin</b>. Compile to WASM and see it live instantly.</i></p>
 </div>
 
 ---
@@ -40,7 +40,7 @@ ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-bui
 
 ### 🦉 Why Sentinel?
 
-*   **⚡ Polyglot Skills System:** Modular architecture. Build "Skills" in **Python, JavaScript, Rust, Go, or Zig**. Drop them in as WASM binaries without recompiling the core.
+*   **⚡ Polyglot Skills System:** Modular architecture. Build "Skills" in **Python, JavaScript, TypeScript, Rust, Go, C++, C#, Java, or Kotlin**. Drop them in as WASM binaries without recompiling the core.
 *   **🧠 AIOps Intelligence:** Autonomous Root Cause Analysis (RCA) and Predictive Maintenance built directly into the agent.
 *   **🔋 Power-Aware Orchestration:** Real-time PUE calculation and performance-per-watt scoring for green AI.
 *   **🖥️ Modern TUI:** A premium, dark-mode terminal interface for instant infrastructure command and control.
