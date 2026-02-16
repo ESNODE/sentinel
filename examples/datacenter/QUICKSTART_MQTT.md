@@ -45,7 +45,7 @@ mappings = "sensors/+/temperature:temperature:celsius:value:1.0"
 ### Step 3: Start ESNODE
 
 ```bash
-./esnode-core daemon --config esnode.toml
+./esnode-sentinel daemon --config esnode.toml
 ```
 
 ### Step 4: Publish Test Data

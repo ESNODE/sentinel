@@ -1,6 +1,6 @@
-# ESNODE-Core Marketing Assets
+# ESNODE Sentinel Marketing Assets
 
-This directory contains professional marketing materials for the ESNODE-Core v0.2.0 release.
+This directory contains professional marketing materials for the ESNODE Sentinel v0.2.0 release.
 
 ---
 
@@ -237,12 +237,12 @@ This directory contains professional marketing materials for the ESNODE-Core v0.
 
 **Images:**
 - Copyright © 2024 Estimatedstocks AB
-- Usage: Marketing and promotional purposes for ESNODE-Core
-- Attribution: "ESNODE-Core by Estimatedstocks AB" required
+- Usage: Marketing and promotional purposes for ESNODE Sentinel
+- Attribution: "ESNODE Sentinel by Estimatedstocks AB" required
 - Modifications: Allowed for localization and platform optimization
 
 **Copy/Templates:**
-- Free to use and modify for ESNODE-Core promotion
+- Free to use and modify for ESNODE Sentinel promotion
 - Attribution appreciated but not required
 - Share improvements back to the project
 
@@ -262,7 +262,7 @@ Have ideas for better marketing materials?
 ## 📞 Support
 
 **Questions about marketing assets:**
-- GitHub Issues: [Report/Request](https://github.com/ESNODE/ESNODE-Core/issues)
+- GitHub Issues: [Report/Request](https://github.com/ESNODE/ESNODE Sentinel/issues)
 - Email: [Marketing contact]
 
 ---

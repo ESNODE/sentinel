@@ -1,6 +1,6 @@
-# ESNODE-Core build & packaging guide
+# ESNODE Sentinel build & packaging guide
 
-This repository builds the ESNODE-Core agent (`esnode-core`).
+This repository builds the ESNODE Sentinel agent (`esnode-sentinel`).
 
 ## Prerequisites
 - Rust toolchain (cargo) installed.
@@ -8,7 +8,7 @@ This repository builds the ESNODE-Core agent (`esnode-core`).
 - Run from repo root.
 
 ## Build artifacts layout (created by scripts)
-- ESNODE-Core artifacts land under `public/distribution/esnode-core/...` (Linux tarball always; `.deb/.rpm` if `fpm` is present; Windows zip if target installed).
+- ESNODE Sentinel artifacts land under `public/distribution/esnode-sentinel/...` (Linux tarball always; `.deb/.rpm` if `fpm` is present; Windows zip if target installed).
 
 Supported OS targets (packaging/compat):
 - Ubuntu Server (primary CUDA/AI target) → deb/tar.gz
@@ -26,25 +26,25 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 ```
 
-ESNODE-Core packaging:
+ESNODE Sentinel packaging:
 ```bash
 ESNODE_VERSION=1.0.0 scripts/dist/build-agent.sh
 # or: scripts/dist/build-agent.sh 1.0.0
 ```
 Outputs:
-- `public/distribution/esnode-core/linux/esnode-core-<version>-linux-amd64.tar.gz`
+- `public/distribution/esnode-sentinel/linux/esnode-sentinel-<version>-linux-amd64.tar.gz`
 - `.deb` per family:
-  - Ubuntu: `public/distribution/esnode-core/linux/deb/ubuntu/esnode-core_<version>_amd64.deb`
-  - Debian: `public/distribution/esnode-core/linux/deb/debian/esnode-core_<version>_amd64.deb`
-  - NVIDIA DGX OS: `public/distribution/esnode-core/linux/deb/dgx/esnode-core_<version>_amd64.deb`
+  - Ubuntu: `public/distribution/esnode-sentinel/linux/deb/ubuntu/esnode-sentinel_<version>_amd64.deb`
+  - Debian: `public/distribution/esnode-sentinel/linux/deb/debian/esnode-sentinel_<version>_amd64.deb`
+  - NVIDIA DGX OS: `public/distribution/esnode-sentinel/linux/deb/dgx/esnode-sentinel_<version>_amd64.deb`
 - `.rpm` per family (shared spec):
-  - RHEL/Rocky/Alma: `public/distribution/esnode-core/linux/rpm/rhel/esnode-core-<version>-1.x86_64.rpm`
-  - SLES: `public/distribution/esnode-core/linux/rpm/sles/esnode-core-<version>-1.x86_64.rpm`
-- `public/distribution/esnode-core/windows/esnode-core-<version>-windows-amd64.zip` if the Windows target is installed
+  - RHEL/Rocky/Alma: `public/distribution/esnode-sentinel/linux/rpm/rhel/esnode-sentinel-<version>-1.x86_64.rpm`
+  - SLES: `public/distribution/esnode-sentinel/linux/rpm/sles/esnode-sentinel-<version>-1.x86_64.rpm`
+- `public/distribution/esnode-sentinel/windows/esnode-sentinel-<version>-windows-amd64.zip` if the Windows target is installed
 
 One-shot release (tar/deb/rpm for Linux targets, optional Windows zip):
 ```bash
-scripts/dist/esnode-core-release.sh
+scripts/dist/esnode-sentinel-release.sh
 # Uses version from crates/agent-bin/Cargo.toml unless ESNODE_VERSION is set
 ```
 Artifacts are written to the canonical layout above and mirrored into `public/distribution/releases/<label>/` for easy pickup (e.g., `host`, `linux-amd64`).
@@ -56,5 +56,5 @@ Artifacts are written to the canonical layout above and mirrored into `public/di
   - When cross-compiling on macOS, install Linux toolchains via Homebrew (`x86_64-unknown-linux-gnu` and/or `aarch64-unknown-linux-gnu`). The release script auto-wires linkers/archivers if they are present, and will skip a target if the toolchain is missing.
 - CI (`.github/workflows/tests.yml`) enforces fmt/clippy/tests on PRs/pushes and, on tags, installs `fpm`/rpm tooling to run `scripts/dist/build-agent.sh` as a packaging smoke.
 - Install helpers:
-  - Linux: `scripts/install/esnode-core-linux.sh` copies binaries to `/usr/local/bin` and installs systemd units.
-  - Windows: `scripts/install/esnode-core-windows.ps1` copies to `C:\Program Files\ESNODE`, adds PATH, and optionally registers an NSSM service.
+  - Linux: `scripts/install/esnode-sentinel-linux.sh` copies binaries to `/usr/local/bin` and installs systemd units.
+  - Windows: `scripts/install/esnode-sentinel-windows.ps1` copies to `C:\Program Files\ESNODE`, adds PATH, and optionally registers an NSSM service.

@@ -1,8 +1,8 @@
 ESNODE | Source Available BUSL-1.1 | Copyright (c) 2024 Estimatedstocks AB
 
-# ESNODE-Core Quickstart
+# ESNODE Sentinel Quickstart
 
-ESNODE-Core is a single, vendor-neutral node agent that exposes **CPU, memory, disk, network, and GPU** metrics for any Linux server or VPS. It integrates with **Prometheus, Grafana, and OTEL-based systems** via standard `/metrics` endpoints. Tested packaging targets for AI infra: Ubuntu (primary), RHEL/Rocky/Alma, NVIDIA DGX OS (Ubuntu-based), SLES, and Debian; Windows zip is provided for hybrid labs.
+ESNODE Sentinel is a single, vendor-neutral node agent that exposes **CPU, memory, disk, network, and GPU** metrics for any Linux server or VPS. It integrates with **Prometheus, Grafana, and OTEL-based systems** via standard `/metrics` endpoints. Tested packaging targets for AI infra: Ubuntu (primary), RHEL/Rocky/Alma, NVIDIA DGX OS (Ubuntu-based), SLES, and Debian; Windows zip is provided for hybrid labs.
 
 GPU/NVML requirements:
 - NVIDIA drivers + NVML available on host.
@@ -17,12 +17,12 @@ Power requirements:
 
 ## Installation options (choose your path)
 - Packages: `.deb` and `.rpm` in `public/distribution/releases/linux-amd64/`
-- Tarball: `esnode-core-0.1.0-linux-amd64.tar.gz` (direct binary)
-- Docker: `docker build -t <repo>/esnode-core:0.1.0 -f Dockerfile .`
+- Tarball: `esnode-sentinel-0.1.0-linux-amd64.tar.gz` (direct binary)
+- Docker: `docker build -t <repo>/esnode-sentinel:0.1.0 -f Dockerfile .`
 - Docker Compose: `docker-compose up -d` (uses repo Dockerfile; set `ESNODE_IMAGE` to override tag)
 - Kubernetes:
   - Plain manifests: `deploy/k8s/*.yaml` (ConfigMap, DaemonSet, Service)
-  - Helm chart: `deploy/helm/esnode-core/` (`helm upgrade --install ...`)
+  - Helm chart: `deploy/helm/esnode-sentinel/` (`helm upgrade --install ...`)
 Pick the method that fits your deployment and flip the same config knobs (`esnode.toml` / Helm values).
 
 ---
@@ -34,7 +34,7 @@ Pick the method that fits your deployment and flip the same config knobs (`esnod
   > ARM64 support can be added later.
 - **GPU (optional):**
   - NVIDIA GPU with driver + NVML available for GPU metrics.
-  - If no GPU is present, ESNODE-Core still works (GPU metrics are simply absent).
+  - If no GPU is present, ESNODE Sentinel still works (GPU metrics are simply absent).
 
 ---
 
@@ -45,20 +45,20 @@ Pick the method that fits your deployment and flip the same config knobs (`esnod
 ```bash
 # Example; adjust version and URL when you publish releases
 VERSION=v0.1.0
-curl -L -o esnode-core "https://github.com/your-org/esnode-core/releases/download/${VERSION}/esnode-core-linux-amd64"
-chmod +x esnode-core
+curl -L -o esnode-sentinel "https://github.com/your-org/esnode-sentinel/releases/download/${VERSION}/esnode-sentinel-linux-amd64"
+chmod +x esnode-sentinel
 ```
 
 Move it somewhere on your `$PATH` (optional but recommended):
 
 ```bash
-sudo mv esnode-core /usr/local/bin/esnode-core
+sudo mv esnode-sentinel /usr/local/bin/esnode-sentinel
 ```
 
-### 2.2 Run ESNODE-Core with default settings
+### 2.2 Run ESNODE Sentinel with default settings
 
 ```bash
-esnode-core
+esnode-sentinel
 ```
 
 **Defaults:**
@@ -95,7 +95,7 @@ You should see `esnode_...` metrics in Prometheus text format.
 
 ## 3. Configuration
 
-ESNODE-Core reads configuration from:
+ESNODE Sentinel reads configuration from:
 
 1. **CLI flags** (highest precedence)
 2. **Environment variables**
@@ -143,10 +143,10 @@ enable_bandwidth_reserve = false# Network QoS
 enable_fs_cleanup = false      # Disk cleanup
 ```
 
-Run ESNODE-Core pointing to this config (if needed):
+Run ESNODE Sentinel pointing to this config (if needed):
 
 ```bash
-ESNODE_CONFIG=/etc/esnode/esnode.toml esnode-core
+ESNODE_CONFIG=/etc/esnode/esnode.toml esnode-sentinel
 ```
 
 > Adjust the actual env var name once you define it in code (e.g. `ESNODE_CONFIG`).
@@ -155,14 +155,14 @@ Note on TSDB path: by default the agent now resolves `local_tsdb_path` to `$XDG_
 
 App collector timeout: the app/model metrics collector uses a 2s HTTP timeout to avoid blocking other collectors; slow/hung endpoints will be skipped for that interval and logged once.
 
-CLI note: `esnode-core status/metrics` uses a lightweight HTTP client with a 2s connect/read timeout to avoid hanging when the agent endpoint is slow.
+CLI note: `esnode-sentinel status/metrics` uses a lightweight HTTP client with a 2s connect/read timeout to avoid hanging when the agent endpoint is slow.
 
 ### 3.2 Common CLI flags (suggested)
 
 > The exact flag names may differ depending on your implementation. Example:
 
 ```bash
-esnode-core \
+esnode-sentinel \
   --listen-address "0.0.0.0:9100" \
   --scrape-interval 5s \
   --enable-gpu true \
@@ -203,8 +203,8 @@ Developer tip:
 
 ### Build a container image (linux/amd64)
 ```bash
-docker build -t myregistry/esnode-core:0.1.0 -f Dockerfile .
-# Image pulls binary from public/distribution/releases/linux-amd64/esnode-core-0.1.0-linux-amd64.tar.gz
+docker build -t myregistry/esnode-sentinel:0.1.0 -f Dockerfile .
+# Image pulls binary from public/distribution/releases/linux-amd64/esnode-sentinel-0.1.0-linux-amd64.tar.gz
 ```
 
 ### Kubernetes manifests (DaemonSet)
@@ -227,7 +227,7 @@ Notes:
 - Adjust `local_tsdb_path` to match your volume and permissions; defaults to `/var/lib/esnode/tsdb` in the manifest.
 
 ## Dashboards & alerts
-- Grafana dashboard: `docs/dashboards/grafana-esnode-core.json`
+- Grafana dashboard: `docs/dashboards/grafana-esnode-sentinel.json`
 - Prometheus alerts: `docs/dashboards/alerts.yaml` (includes disk/network/gpu degradation and aggregate score)
 ```
 
@@ -241,8 +241,8 @@ Notes:
 
 ```bash
 sudo mkdir -p /etc/esnode
-sudo cp esnode-core /usr/local/bin/esnode-core
-sudo chmod +x /usr/local/bin/esnode-core
+sudo cp esnode-sentinel /usr/local/bin/esnode-sentinel
+sudo chmod +x /usr/local/bin/esnode-sentinel
 
 sudo tee /etc/esnode/esnode.toml >/dev/null << 'EOF'
 listen_address = "0.0.0.0:9100"
@@ -258,7 +258,7 @@ EOF
 
 ### 4.2 Create systemd unit file
 
-`/etc/systemd/system/esnode-core.service`:
+`/etc/systemd/system/esnode-sentinel.service`:
 
 ```ini
 [Unit]
@@ -268,7 +268,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/esnode-core
+ExecStart=/usr/local/bin/esnode-sentinel
 Environment=ESNODE_CONFIG=/etc/esnode/esnode.toml
 Restart=on-failure
 RestartSec=5
@@ -292,9 +292,9 @@ sudo chown -R esnode:esnode /etc/esnode
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable esnode-core
-sudo systemctl start esnode-core
-sudo systemctl status esnode-core
+sudo systemctl enable esnode-sentinel
+sudo systemctl start esnode-sentinel
+sudo systemctl status esnode-sentinel
 ```
 
 Check metrics:
@@ -314,7 +314,7 @@ curl http://localhost:9100/metrics | head
 ```bash
 docker run --rm \
   -p 9100:9100 \
-  ghcr.io/your-org/esnode-core:v0.1.0
+  ghcr.io/your-org/esnode-sentinel:v0.1.0
 ```
 
 ### 5.2 Docker with NVIDIA GPU (example)
@@ -326,7 +326,7 @@ docker run --rm \
   --gpus all \
   --ipc=host \
   -p 9100:9100 \
-  ghcr.io/your-org/esnode-core:v0.1.0
+  ghcr.io/your-org/esnode-sentinel:v0.1.0
 ```
 
 > You may need to pass additional env vars or mount `/usr/lib/x86_64-linux-gnu/` etc., depending on how NVML is accessed in your image.
@@ -335,7 +335,7 @@ docker run --rm \
 
 ## 6. Running as a Kubernetes DaemonSet
 
-ESNODE-Core can run on every node in your cluster using a DaemonSet.
+ESNODE Sentinel can run on every node in your cluster using a DaemonSet.
 
 ### 6.1 Example DaemonSet (simplified)
 
@@ -343,22 +343,22 @@ ESNODE-Core can run on every node in your cluster using a DaemonSet.
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: esnode-core
+  name: esnode-sentinel
   namespace: monitoring
 spec:
   selector:
     matchLabels:
-      app: esnode-core
+      app: esnode-sentinel
   template:
     metadata:
       labels:
-        app: esnode-core
+        app: esnode-sentinel
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-        - name: esnode-core
-          image: ghcr.io/your-org/esnode-core:v0.1.0
+        - name: esnode-sentinel
+          image: ghcr.io/your-org/esnode-sentinel:v0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: metrics
@@ -453,7 +453,7 @@ If there are no GPUs or NVML is missing, these metrics simply won’t appear. Ch
 ---
 
 ## 9. AIOps & Predictive Maintenance
-ESNODE-Core now includes autonomous intelligence features that run locally on the agent:
+ESNODE Sentinel now includes autonomous intelligence features that run locally on the agent:
 
 *   **Failure Prediction**: The agent analyzes ECC error trends and thermal history to predict GPU failures. Risk scores are exposed via `esnode_gpu_failure_risk_score` (0-100).
 *   **Automated RCA**: Performance dips are correlated with network packet loss or thermal throttling events, exposed via `esnode_rca_detections_total`.
@@ -469,11 +469,11 @@ curl -s http://localhost:9100/metrics | grep esnode_gpu_failure_risk_score
 ## 10. Next Steps
 
 * Import the sample Grafana dashboards from `docs/monitoring-examples.md` (once available).
-* Roll out ESNODE-Core to more nodes.
+* Roll out ESNODE Sentinel to more nodes.
 * Start tracking:
 
   * GPU utilization vs load
   * Node hotspots
   * Capacity planning and right-sizing decisions
 
-ESNODE-Core is designed to be a **small, boring, reliable building block** for AI infrastructure observability.
+ESNODE Sentinel is designed to be a **small, boring, reliable building block** for AI infrastructure observability.

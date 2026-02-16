@@ -1,11 +1,11 @@
-# ESNODE-Core: Product Capabilities v1.0
+# ESNODE Sentinel: Product Capabilities v1.0
 
-ESNODE-Core is the industry's first **Power-Aware AIOps Infrastructure Observability** framework designed exclusively for high-performance AI/ML clusters. It combines deep hardware telemetry with autonomous intelligent operations to ensure maximum GPU availability and energy efficiency.
+ESNODE Sentinel is the industry's first **Power-Aware AIOps Infrastructure Observability** framework designed exclusively for high-performance AI/ML clusters. It combines deep hardware telemetry with autonomous intelligent operations to ensure maximum GPU availability and energy efficiency.
 
 ---
 
 ## 🚀 1. Autonomous AIOps Intelligence
-ESNODE-Core doesn't just monitor—it understands. Our built-in RCA engine and predictive models move your infrastructure from reactive to proactive.
+ESNODE Sentinel doesn't just monitor—it understands. Our built-in RCA engine and predictive models move your infrastructure from reactive to proactive.
 
 ### **Autonomous Root Cause Analysis (RCA)**
 - **Kubernetes Event Correlation**: Automatically maps GPU performance degradation to Kubernetes pod events (evictions, rescheduling, startup spikes).
@@ -70,4 +70,4 @@ Designed for security, scale, and ease of use in production environments.
 - **Helm Charts**: One-click deployment for GPU-accelerated Kubernetes clusters.
 
 ---
-© 2024 Estimatedstocks AB | ESNODE-Core is distributed under the BUSL-1.1 license.
+© 2024 Estimatedstocks AB | ESNODE Sentinel is distributed under the BUSL-1.1 license.

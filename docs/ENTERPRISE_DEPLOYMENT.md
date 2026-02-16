@@ -1,4 +1,4 @@
-# ESNODE-Core Enterprise Deployment Guide
+# ESNODE Sentinel Enterprise Deployment Guide
 
 **Version:** 1.0  
 **Target:** Fortune 500 & Mega-Cap Enterprises  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-ESNODE-Core is an enterprise-grade, power-aware observability platform designed for AI infrastructure at scale. Built with Rust for memory safety and performance, it provides production-ready telemetry, autonomous operations, and predictive maintenance capabilities trusted by the world's largest technology companies.
+ESNODE Sentinel is an enterprise-grade, power-aware observability platform designed for AI infrastructure at scale. Built with Rust for memory safety and performance, it provides production-ready telemetry, autonomous operations, and predictive maintenance capabilities trusted by the world's largest technology companies.
 
 ### Key Enterprise Features
 
@@ -163,21 +163,21 @@ Example audit event:
 #### Method 1: RPM/DEB Packages (Recommended)
 ```bash
 # RHEL/CentOS/Rocky/AlmaLinux
-sudo rpm -ivh esnode-core-1.0.0-1.el8.x86_64.rpm
+sudo rpm -ivh esnode-sentinel-1.0.0-1.el8.x86_64.rpm
 
 # Ubuntu/Debian
-sudo dpkg -i esnode-core_1.0.0_amd64.deb
+sudo dpkg -i esnode-sentinel_1.0.0_amd64.deb
 
 # Auto-configure systemd service
-sudo systemctl enable esnode-core
-sudo systemctl start esnode-core
+sudo systemctl enable esnode-sentinel
+sudo systemctl start esnode-sentinel
 ```
 
 #### Method 2: Kubernetes DaemonSet
 ```bash
 # Deploy via Helm (recommended for k8s)
 helm repo add esnode https://charts.esnode.io
-helm upgrade --install esnode-core esnode/esnode-core \
+helm upgrade --install esnode-sentinel esnode/esnode-sentinel \
   --namespace monitoring \
   --create-namespace \
   --set security.tlsEnabled=true \
@@ -221,7 +221,7 @@ ansible-playbook -i inventory/production esnode-deploy.yml \
 
 ```toml
 # /etc/esnode/esnode.toml - Production Configuration
-# ESNODE-Core v1.0 Enterprise Edition
+# ESNODE Sentinel v1.0 Enterprise Edition
 
 [agent]
 listen_address = "0.0.0.0:9100"
@@ -302,7 +302,7 @@ aws secretsmanager create-secret \
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: esnode-core
+  name: esnode-sentinel
 spec:
   updateStrategy:
     type: RollingUpdate
@@ -311,8 +311,8 @@ spec:
   template:
     spec:
       containers:
-      - name: esnode-core
-        image: esnode/esnode-core:1.0.0
+      - name: esnode-sentinel
+        image: esnode/esnode-sentinel:1.0.0
         livenessProbe:
           httpGet:
             path: /healthz

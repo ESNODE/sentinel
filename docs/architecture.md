@@ -1,11 +1,11 @@
 ESNODE | Source Available BUSL-1.1 | Copyright (c) 2025 Estimatedstocks AB
 
-# ESNODE Architecture (ESNODE-Core)
+# ESNODE Architecture (ESNODE Sentinel)
 
-ESNODE-Core lives in this repository.
+ESNODE Sentinel lives in this repository.
 
 ## Components
-- `esnode-core`: per-node collector exposing:
+- `esnode-sentinel`: per-node collector exposing:
   - `/metrics` Prometheus text (host + GPU + power + self-metrics)
   - `/status` and `/v1/status` JSON snapshot (load, power, temps, GPUs, last scrape/errors)
   - `/events` SSE stream of status snapshots (5s default)

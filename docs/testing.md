@@ -10,7 +10,7 @@ cargo test --workspace
 ```
 
 What is covered today:
-- Config overrides (agent-core/tests/config_overrides.rs)
+- Config overrides (sentinel-core/tests/config_overrides.rs)
 - Client URL normalization and a tiny in-process mock server for `/status` (agent-bin/src/client.rs tests)
 - Console helpers (NodeSummary/MetricToggleState) for data-to-string formatting (agent-bin/src/console.rs tests)
 - CLI parsing for status/metrics/enable-metric-set (agent-bin/src/main.rs tests)

@@ -1,4 +1,4 @@
-# ESNODE-Core v0.2.0 Marketing Assets
+# ESNODE Sentinel v0.2.0 Marketing Assets
 
 **Release Date:** 2026-02-07  
 **Campaign:** Brand Modernization Launch
@@ -22,13 +22,13 @@
 
 **Usage:**
 ```
-🚀 Excited to announce ESNODE-Core v0.2.0!
+🚀 Excited to announce ESNODE Sentinel v0.2.0!
 
 ✱ Modern TUI Dashboard
 ✱ Professional Cloud-Grade Interface  
 ✱ Power-Aware AI Infrastructure
 
-Download now: github.com/ESNODE/ESNODE-Core
+Download now: github.com/ESNODE/ESNODE Sentinel
 
 #AIInfrastructure #GPU #Observability #OpenSource
 ```
@@ -50,7 +50,7 @@ Download now: github.com/ESNODE/ESNODE-Core
 
 **Usage:**
 ```
-Check out the new ESNODE-Core dashboard! 📊
+Check out the new ESNODE Sentinel dashboard! 📊
 
 🎨 Enterprise-grade design
 ⚡ Real-time monitoring
@@ -117,7 +117,7 @@ ESNODE v0.2.0 - What's New 🎉
 ✱ Production Ready
 → Complete installation & deployment
 
-Download: github.com/ESNODE/ESNODE-Core
+Download: github.com/ESNODE/ESNODE Sentinel
 ```
 
 ---
@@ -128,7 +128,7 @@ Download: github.com/ESNODE/ESNODE-Core
 
 **Tweet 1 (Announcement):**
 ```
-🚀 ESNODE-Core v0.2.0 is here!
+🚀 ESNODE Sentinel v0.2.0 is here!
 
 We've completely modernized our GPU infrastructure monitoring platform with:
 
@@ -172,7 +172,7 @@ The new dashboard shows:
 ```
 Ready to upgrade your GPU monitoring?
 
-📦 Download: github.com/ESNODE/ESNODE-Core
+📦 Download: github.com/ESNODE/ESNODE Sentinel
 📖 Docs: Full installation guide included
 🆓 License: BUSL-1.1 (Source Available)
 
@@ -184,9 +184,9 @@ Star ⭐ the repo if you like it!
 ### LinkedIn Post (Long Form)
 
 ```
-🎉 Announcing ESNODE-Core v0.2.0: Professional GPU Infrastructure Monitoring
+🎉 Announcing ESNODE Sentinel v0.2.0: Professional GPU Infrastructure Monitoring
 
-I'm excited to share that we've released a major update to ESNODE-Core, our power-aware AI infrastructure observability platform.
+I'm excited to share that we've released a major update to ESNODE Sentinel, our power-aware AI infrastructure observability platform.
 
 ✨ What's New:
 
@@ -216,7 +216,7 @@ Complete installation scripts with systemd/launchd service support, professional
 
 📦 Get Started:
 
-Download: github.com/ESNODE/ESNODE-Core
+Download: github.com/ESNODE/ESNODE Sentinel
 Documentation: Comprehensive guides included
 License: BUSL-1.1 (Source Available)
 
@@ -269,14 +269,14 @@ Built for:
 
 ## 📧 Email Newsletter Template
 
-**Subject:** ESNODE-Core v0.2.0: Modernized Dashboard & Professional Design
+**Subject:** ESNODE Sentinel v0.2.0: Modernized Dashboard & Professional Design
 
 **Body:**
 
 ```
 Hi [Name],
 
-Big news! We've just released ESNODE-Core v0.2.0 with a complete dashboard modernization.
+Big news! We've just released ESNODE Sentinel v0.2.0 with a complete dashboard modernization.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -315,7 +315,7 @@ We've completely redesigned the terminal interface with:
 
 🚀 GET STARTED
 
-Download: github.com/ESNODE/ESNODE-Core
+Download: github.com/ESNODE/ESNODE Sentinel
 Installation: Just run ./install.sh
 Platforms: Ubuntu, RHEL, Debian, macOS
 
@@ -344,7 +344,7 @@ P.S. Star ⭐ us on GitHub if you find ESNODE useful!
 
 ## 🎬 Video Script (For Demo Video)
 
-**Title:** ESNODE-Core v0.2.0: Modern GPU Monitoring Dashboard
+**Title:** ESNODE Sentinel v0.2.0: Modern GPU Monitoring Dashboard
 
 **Duration:** 60-90 seconds
 
@@ -352,7 +352,7 @@ P.S. Star ⭐ us on GitHub if you find ESNODE useful!
 
 ```
 [0:00-0:05] Opening shot: ESNODE logo animation
-"Introducing ESNODE-Core v0.2.0"
+"Introducing ESNODE Sentinel v0.2.0"
 
 [0:05-0:15] Dashboard overview
 "We've completely modernized the terminal interface"
@@ -375,7 +375,7 @@ Show: ./install.sh command and service starting
 Text overlay with key features
 
 [0:55-0:60] Call to action
-"Download now at github.com/ESNODE/ESNODE-Core"
+"Download now at github.com/ESNODE/ESNODE Sentinel"
 ESNODE logo + GitHub URL
 ```
 
@@ -383,7 +383,7 @@ ESNODE logo + GitHub URL
 
 ## 📊 Blog Post Outline
 
-**Title:** ESNODE-Core v0.2.0: A Modern Approach to GPU Infrastructure Monitoring
+**Title:** ESNODE Sentinel v0.2.0: A Modern Approach to GPU Infrastructure Monitoring
 
 **Sections:**
 
@@ -481,11 +481,11 @@ ESNODE logo + GitHub URL
 
 **FOR IMMEDIATE RELEASE**
 
-**ESNODE-Core v0.2.0 Brings Enterprise-Grade GPU Monitoring to Open Source**
+**ESNODE Sentinel v0.2.0 Brings Enterprise-Grade GPU Monitoring to Open Source**
 
 *Estimatedstocks AB releases major update with modernized dashboard and production-ready infrastructure*
 
-[Location], [Date] - Estimatedstocks AB today announced the release of ESNODE-Core v0.2.0, a significant update to its power-aware AI infrastructure monitoring platform. The release introduces a completely redesigned terminal user interface, new brand identity, and production-ready deployment infrastructure.
+[Location], [Date] - Estimatedstocks AB today announced the release of ESNODE Sentinel v0.2.0, a significant update to its power-aware AI infrastructure monitoring platform. The release introduces a completely redesigned terminal user interface, new brand identity, and production-ready deployment infrastructure.
 
 "We've raised the bar for terminal-based monitoring interfaces," said [Spokesperson Name], [Title] at Estimatedstocks AB. "The new dashboard rivals cloud provider consoles in quality while maintaining the efficiency and flexibility of a terminal application."
 
@@ -496,9 +496,9 @@ Key highlights of version 0.2.0 include:
 • Power-Aware Orchestration: Autonomous workload optimization based on energy efficiency
 • Production Infrastructure: One-command installation with systemd/launchd service support
 
-ESNODE-Core is available under the BUSL-1.1 license (source available) and supports Ubuntu, RHEL, Debian, and macOS platforms.
+ESNODE Sentinel is available under the BUSL-1.1 license (source available) and supports Ubuntu, RHEL, Debian, and macOS platforms.
 
-For more information and downloads, visit: github.com/ESNODE/ESNODE-Core
+For more information and downloads, visit: github.com/ESNODE/ESNODE Sentinel
 
 About Estimatedstocks AB:
 [Company description]

@@ -1,4 +1,4 @@
-# ESNODE-Core Final Validation Report
+# ESNODE Sentinel Final Validation Report
 
 **Date:** 2026-02-09  
 **Version:** 1.0.0  
@@ -34,7 +34,7 @@
 - **Success Rate:** 100%
 
 **Test Breakdown:**
-- agent-core: 5 tests (RCA, predictive, control, policy)
+- sentinel-core: 5 tests (RCA, predictive, control, policy)
 - agent-bin: 6 tests (CLI, client)
 - Integration tests: 7 tests
 
@@ -56,7 +56,7 @@
 **Test:** Binary functionality check  
 **Result:** ✅ **FUNCTIONAL**  
 **Details:**
-- **Binary Path:** `target/release/esnode-core`
+- **Binary Path:** `target/release/esnode-sentinel`
 - **Size:** 9.8 MB (optimized, stripped)
 - **Type:** Mach-O 64-bit executable (multi-platform capable)
 - **Execution:** Verified working (--help successful)
@@ -194,7 +194,7 @@ COMPREHENSIVE VALIDATION RESULTS:
 
 ### Certification
 
-**The ESNODE-Core codebase is:**
+**The ESNODE Sentinel codebase is:**
 - ✅ **Error-free** - Zero compilation errors
 - ✅ **Fully functional** - All tests passing, binary working
 - ✅ **Well-documented** - Comprehensive enterprise documentation

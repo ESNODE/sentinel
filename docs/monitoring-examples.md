@@ -4,7 +4,7 @@ ESNODE | Source Available BUSL-1.1 | Copyright (c) 2024 Estimatedstocks AB
 
 This document provides:
 
-1. Example **Prometheus scrape configs** for ESNODE-Core and LLM/model metrics.
+1. Example **Prometheus scrape configs** for ESNODE Sentinel and LLM/model metrics.
 2. A **Grafana dashboard JSON outline** with sections for:
    - Node overview (CPU, memory, disk, network)
    - GPU & power
@@ -14,7 +14,7 @@ This document provides:
 
 ## 1. Prometheus Configuration Examples
 
-### 1.1 Scraping ESNODE-Core (static targets)
+### 1.1 Scraping ESNODE Sentinel (static targets)
 
 Add to your `prometheus.yml`:
 
@@ -29,13 +29,13 @@ scrape_configs:
           - 'server3:9100'
 ```
 
-This assumes ESNODE-Core listens on port `9100`.
+This assumes ESNODE Sentinel listens on port `9100`.
 
 ---
 
-### 1.2 Scraping ESNODE-Core in Kubernetes (DaemonSet)
+### 1.2 Scraping ESNODE Sentinel in Kubernetes (DaemonSet)
 
-If ESNODE-Core runs as a DaemonSet (one per node) and exposes port 9100:
+If ESNODE Sentinel runs as a DaemonSet (one per node) and exposes port 9100:
 
 ```yaml
 scrape_configs:

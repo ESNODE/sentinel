@@ -1,6 +1,6 @@
-# ESNODE-Core Enterprise Transformation Summary
+# ESNODE Sentinel Enterprise Transformation Summary
 
-**Project:** ESNODE-Core - Power-Aware AI Infrastructure Observability  
+**Project:** ESNODE Sentinel - Power-Aware AI Infrastructure Observability  
 **Transformation Date:** 2026-02-09  
 **Version:** 1.0.0 Enterprise Edition  
 **Status:** ✅ **PRODUCTION READY - ENTERPRISE CERTIFIED**
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-ESNODE-Core has been successfully transformed into an **enterprise-grade software product** that meets the stringent requirements of Fortune 500 companies and the world's largest mega-cap corporations. The software is now production-ready with professional build systems, comprehensive documentation, security hardening, and regulatory compliance.
+ESNODE Sentinel has been successfully transformed into an **enterprise-grade software product** that meets the stringent requirements of Fortune 500 companies and the world's largest mega-cap corporations. The software is now production-ready with professional build systems, comprehensive documentation, security hardening, and regulatory compliance.
 
 ### Key Achievements
 
@@ -262,7 +262,7 @@ ESNODE-Core has been successfully transformed into an **enterprise-grade softwar
 
 ### Cost Comparison (1000-node cluster, 3 years)
 
-**ESNODE-Core:**
+**ESNODE Sentinel:**
 - License: Source-available (BUSL-1.1)
 - **Support (Platinum): $50K/year**
 - Implementation: $25K (one-time)
@@ -344,11 +344,11 @@ ESNODE-Core has been successfully transformed into an **enterprise-grade softwar
 - `CODE_QUALITY_REPORT.md` (New)
 
 **Configuration:**
-- `systemd/esnode-core.service` (Enhanced security)
-- `rpm/esnode-core.spec` (RPM packaging)
+- `systemd/esnode-sentinel.service` (Enhanced security)
+- `rpm/esnode-sentinel.spec` (RPM packaging)
 - `debian/control` (DEB packaging)
 - `Dockerfile.enterprise` (Optimized containers)
-- `helm/esnode-core/` (Kubernetes Helm chart)
+- `helm/esnode-sentinel/` (Kubernetes Helm chart)
 
 **Metadata:**
 - `README.md` (Updated - enterprise badges)
@@ -360,7 +360,7 @@ ESNODE-Core has been successfully transformed into an **enterprise-grade softwar
 
 ### Production Binary
 
-**Binary Name:** esnode-core  
+**Binary Name:** esnode-sentinel  
 **Version:** 1.0.0-1  
 **Size:** 9.8 MB (stripped, optimized)  
 **Language:** Rust 1.91.1  
@@ -405,7 +405,7 @@ ESNODE-Core has been successfully transformed into an **enterprise-grade softwar
 
 **CERTIFICATION STATUS: ✅ APPROVED FOR ENTERPRISE DEPLOYMENT**
 
-ESNODE-Core version 1.0.0 is hereby certified as meeting all requirements for adoption by:
+ESNODE Sentinel version 1.0.0 is hereby certified as meeting all requirements for adoption by:
 
 ✅ **Fortune 500 companies**  
 ✅ **Mega-cap corporations**  
@@ -463,7 +463,7 @@ ESNODE-Core version 1.0.0 is hereby certified as meeting all requirements for ad
 
 ## 17. Summary
 
-ESNODE-Core has been successfully elevated to **enterprise-grade** status with:
+ESNODE Sentinel has been successfully elevated to **enterprise-grade** status with:
 
 - ✅ **Professional build system** - Optimized, signed, reproducible
 - ✅ **Multi-platform packaging** - RPM, DEB, containers, Helm
@@ -488,13 +488,13 @@ ESNODE-Core has been successfully elevated to **enterprise-grade** status with:
 **Online:**
 - **Website:** https://esnode.io
 - **Documentation:** https://docs.esnode.io
-- **GitHub:** https://github.com/estimatedstocks/esnode-core
+- **GitHub:** https://github.com/estimatedstocks/esnode-sentinel
 
 ---
 
 **✅ ENTERPRISE TRANSFORMATION COMPLETE**
 
-*ESNODE-Core is production-ready for Fortune 500 companies and mega-cap corporations worldwide.*
+*ESNODE Sentinel is production-ready for Fortune 500 companies and mega-cap corporations worldwide.*
 
 ---
 

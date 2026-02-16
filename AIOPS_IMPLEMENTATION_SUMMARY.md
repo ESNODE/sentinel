@@ -1,7 +1,7 @@
 # AIOps Implementation Summary
 
 **Date:** 2026-02-09  
-**Project:** ESNODE-Core  
+**Project:** ESNODE Sentinel  
 **Features:** Automated Root Cause Analysis & Predictive Maintenance
 
 ---
@@ -20,7 +20,7 @@
 
 ## 2. New Modules Implemented
 
-### A. Automated Root Cause Analysis (`crates/agent-core/src/rca.rs`)
+### A. Automated Root Cause Analysis (`crates/sentinel-core/src/rca.rs`)
 **Purpose:** Correlate GPU performance dips with infrastructure events
 
 **Features:**
@@ -38,7 +38,7 @@
 **Metrics:**
 - `esnode_rca_detections_total{cause, confidence}` (Counter)
 
-### B. Predictive Maintenance (`crates/agent-core/src/predictive.rs`)
+### B. Predictive Maintenance (`crates/sentinel-core/src/predictive.rs`)
 **Purpose:** Predict GPU failures before they occur
 
 **Risk Factors Analyzed:**
@@ -62,7 +62,7 @@
 
 ## 3. Enhanced Data Collection
 
-### Updated Structs (`crates/agent-core/src/state.rs`)
+### Updated Structs (`crates/sentinel-core/src/state.rs`)
 ```rust
 pub struct GpuHealth {
     // NEW FIELDS:
@@ -72,13 +72,13 @@ pub struct GpuHealth {
 }
 ```
 
-### GPU Collector Changes (`crates/agent-core/src/collectors/gpu.rs`)
+### GPU Collector Changes (`crates/sentinel-core/src/collectors/gpu.rs`)
 - Now populates aggregate ECC counters from NVML
 - Provides historical context for failure prediction
 
 ---
 
-## 4. Agent Integration (`crates/agent-core/src/lib.rs`)
+## 4. Agent Integration (`crates/sentinel-core/src/lib.rs`)
 
 ### Autonomous Operation
 Both engines run automatically in the `collection_task`:
@@ -145,7 +145,7 @@ loop {
 
 ```bash
 Running 18 tests:
-✓ agent-core: 5 tests (rca, predictive, control, nvml_ext, policy)
+✓ sentinel-core: 5 tests (rca, predictive, control, nvml_ext, policy)
 ✓ agent-bin: 6 tests (CLI parsing, client)
 ✓ integration tests: 7 tests (config, policy, orchestrator)
 
@@ -211,7 +211,7 @@ A professional AIOps intelligence dashboard has been added to the built-in TUI c
 - ✅ **Color-coded Alerting**: Critical (Red), Warning (Yellow), and Healthy (Green) status indicators.
 
 **How to Access:**
-1. Run the console: `esnode-core console`
+1. Run the console: `esnode-sentinel console`
 2. Press **'8'** to jump to the AIOps Intelligence dashboard.
 3. Use **Up/Down** arrows to navigate between insights.
 
@@ -252,7 +252,7 @@ Potential next steps:
 
 ## Summary
 
-The ESNODE-Core agent now includes **autonomous AIOps intelligence** that:
+The ESNODE Sentinel agent now includes **autonomous AIOps intelligence** that:
 1. **Detects root causes** of performance issues in real-time (Network, Thermal, K8s)
 2. **Predicts hardware failures** before they occur using ECC/Deep-Dive data
 3. **Power-Aware Orchestration** distribution visibility built-in

@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-Successfully updated ESNODE-Core with comprehensive branding modernization including:
+Successfully updated ESNODE Sentinel with comprehensive branding modernization including:
 - New logo integration (asterisk ✱ symbol)
 - Updated tagline: "Power-Aware AI Infrastructure"
 - Modern dark navy color scheme
@@ -220,7 +220,7 @@ cargo build --release -p agent-bin
 
 ### Runtime Test ✅
 ```bash
-./target/release/esnode-core cli
+./target/release/esnode-sentinel cli
 ```
 **Result:** TUI launches successfully  
 **Display:** All branding elements render correctly
@@ -397,4 +397,4 @@ The TUI now presents a **cloud-provider-grade** user experience that matches the
 **Prepared by:** Antigravity AI  
 **Date:** 2026-02-07  
 **Version:** Final v1.0  
-**Repository:** [ESNODE/ESNODE-Core](https://github.com/ESNODE/ESNODE-Core)
+**Repository:** [ESNODE/ESNODE Sentinel](https://github.com/ESNODE/ESNODE Sentinel)

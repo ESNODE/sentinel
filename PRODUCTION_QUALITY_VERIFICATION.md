@@ -113,7 +113,7 @@ This is a complex kernel-level feature requiring:
 
 | Component | Build | Tests | Coverage |
 |-----------|-------|-------|----------|
-| **agent-core** | ✅ Release | 7/7 ✅ | PUE, RCA, Control, Predictive |
+| **sentinel-core** | ✅ Release | 7/7 ✅ | PUE, RCA, Control, Predictive |
 | **esnode-mqtt** | ✅ Release | 3/3 ✅ | Topic matching, JSON parsing, Lifecycle |
 | **esnode-modbus** | ✅ Release | 1/1 ✅ | Read registers |
 | **esnode-dnp3** | ✅ Release | 1/1 ✅ | DNP3 protocol |
@@ -129,8 +129,8 @@ cargo test --workspace --lib
 cargo build --release
 # Result: Finished in 3m 30s ✅
 
-./target/release/esnode-core --version
-# Result: esnode-core 0.1.0 ✅
+./target/release/esnode-sentinel --version
+# Result: esnode-sentinel 0.1.0 ✅
 ```
 
 ---
@@ -203,8 +203,8 @@ Errors: 0 ✅
 
 ### New Files Created
 ```
-crates/agent-core/src/collectors/pue.rs           # PUE calculator (170 lines)
-crates/agent-core/src/metrics.rs                  # 5 new metrics added
+crates/sentinel-core/src/collectors/pue.rs           # PUE calculator (170 lines)
+crates/sentinel-core/src/metrics.rs                  # 5 new metrics added
 crates/esnode-mqtt/src/lib.rs                     # TLS fields added
 crates/esnode-mqtt/TLS_IMPLEMENTATION.md          # TLS guide
 dashboards/esnode-facility-monitoring.json        # Grafana dashboard
@@ -216,8 +216,8 @@ PRODUCTION_DEPLOYMENT_GUIDE.md                    # This guide
 
 ### Modified Files
 ```
-crates/agent-core/src/lib.rs                      # PUE integration
-crates/agent-core/src/collectors/mod.rs           # PUE module export
+crates/sentinel-core/src/lib.rs                      # PUE integration
+crates/sentinel-core/src/collectors/mod.rs           # PUE module export
 crates/agent-bin/src/main.rs                      # MQTT TLS config
 crates/esnode-mqtt/Cargo.toml                     # TLS dependencies
 ```
@@ -235,7 +235,7 @@ crates/esnode-mqtt/Cargo.toml                     # TLS dependencies
 - [x] Binary creation
 
 ### Deployment Steps
-1. **Copy Binary** → `/opt/esnode/esnode-core`
+1. **Copy Binary** → `/opt/esnode/esnode-sentinel`
 2. **Copy Config** → `/etc/esnode/esnode.toml`
 3. **Create Service** → `/etc/systemd/system/esnode.service`
 4. **Import Dashboard** → Grafana UI
@@ -280,7 +280,7 @@ crates/esnode-mqtt/Cargo.toml                     # TLS dependencies
 
 ### For Development Team
 - Review: `FEATURES_IMPLEMENTATION_SUMMARY.md`
-- Reference: `crates/agent-core/src/collectors/pue.rs`
+- Reference: `crates/sentinel-core/src/collectors/pue.rs`
 - Next Sprint: eBPF implementation (if desired)
 
 ---
@@ -327,7 +327,7 @@ crates/esnode-mqtt/Cargo.toml                     # TLS dependencies
 ### For Issues
 ```bash
 # Collect diagnostic info
-./esnode-core --version
+./esnode-sentinel --version
 journalctl -u esnode --since "1 hour ago"
 curl localhost:9100/metrics | head -50
 ```
@@ -344,8 +344,8 @@ curl localhost:9100/metrics | head -50
 ✅ cargo test --workspace --lib
    test result: ok. 13 passed; 0 failed
 
-✅ ./target/release/esnode-core --version
-   esnode-core 0.1.0
+✅ ./target/release/esnode-sentinel --version
+   esnode-sentinel 0.1.0
 
 ✅ Release binary size: ~50MB (optimized)
 

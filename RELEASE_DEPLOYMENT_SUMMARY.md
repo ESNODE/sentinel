@@ -1,4 +1,4 @@
-# ESNODE-Core v0.2.0 - Release Deployment Summary
+# ESNODE Sentinel v0.2.0 - Release Deployment Summary
 
 **Release Date:** 2026-02-07  
 **Version:** v0.2.0  
@@ -8,7 +8,7 @@
 
 ## Release Overview
 
-Complete branding modernization and release infrastructure for ESNODE-Core, including:
+Complete branding modernization and release infrastructure for ESNODE Sentinel, including:
 - Updated logo and brand identity
 - Modernized TUI with professional UI
 - Comprehensive build and installation system
@@ -23,10 +23,10 @@ Complete branding modernization and release infrastructure for ESNODE-Core, incl
 
 | Platform | Architecture | File | Size |
 |----------|--------------|------|------|
-| macOS | ARM64 (M1/M2) | `esnode-core-darwin-arm64-v0.1.0.tar.gz` | 4.5 MB |
-| macOS | x86_64 (Intel) | `esnode-core-darwin-amd64-v0.1.0.tar.gz` | 3.6 MB |
-| Linux | x86_64 (AMD64) | `esnode-core-linux-amd64-v0.2.0.tar.gz` | TBD* |
-| Linux | ARM64 | `esnode-core-linux-arm64-v0.2.0.tar.gz` | TBD* |
+| macOS | ARM64 (M1/M2) | `esnode-sentinel-darwin-arm64-v0.1.0.tar.gz` | 4.5 MB |
+| macOS | x86_64 (Intel) | `esnode-sentinel-darwin-amd64-v0.1.0.tar.gz` | 3.6 MB |
+| Linux | x86_64 (AMD64) | `esnode-sentinel-linux-amd64-v0.2.0.tar.gz` | TBD* |
+| Linux | ARM64 | `esnode-sentinel-linux-arm64-v0.2.0.tar.gz` | TBD* |
 
 *Cross-compilation from macOS requires `cross` tool or Linux build environment
 
@@ -34,8 +34,8 @@ Complete branding modernization and release infrastructure for ESNODE-Core, incl
 
 Each tarball includes:
 ```
-esnode-core-{platform}-{arch}-v{version}/
-├── esnode-core          # Binary executable
+esnode-sentinel-{platform}-{arch}-v{version}/
+├── esnode-sentinel          # Binary executable
 ├── install.sh           # Installation script
 └── README.txt           # Quick start guide
 ```
@@ -163,27 +163,27 @@ INSTALL_DIR=$HOME/.local/bin ./install.sh
 
 ```bash
 # Download release
-wget https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
+wget https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
 
 # Extract and install
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
-cd esnode-core-linux-amd64-v0.2.0
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+cd esnode-sentinel-linux-amd64-v0.2.0
 sudo ./install.sh
 
 # Start service
-sudo systemctl start esnode-core
+sudo systemctl start esnode-sentinel
 
 # Launch TUI
-esnode-core cli
+esnode-sentinel cli
 ```
 
 ### 2. User Installation (No Root)
 
 ```bash
 # Download and extract
-wget https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
-cd esnode-core-linux-amd64-v0.2.0
+wget https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+cd esnode-sentinel-linux-amd64-v0.2.0
 
 # Install to user directory
 INSTALL_DIR=$HOME/.local/bin ./install.sh
@@ -193,18 +193,18 @@ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 
 # Start daemon
-esnode-core daemon &
+esnode-sentinel daemon &
 
 # Launch TUI
-esnode-core cli
+esnode-sentinel cli
 ```
 
 ### 3. Build from Source
 
 ```bash
 # Clone repository
-git clone https://github.com/ESNODE/ESNODE-Core.git
-cd ESNODE-Core
+git clone https://github.com/ESNODE/ESNODE Sentinel.git
+cd ESNODE Sentinel
 
 # Build release
 cargo build --release -p agent-bin
@@ -222,23 +222,23 @@ sudo ./scripts/install.sh
 
 ### Linux (systemd)
 
-**Service File:** `/etc/systemd/system/esnode-core.service`
+**Service File:** `/etc/systemd/system/esnode-sentinel.service`
 
 ```bash
 # Start
-sudo systemctl start esnode-core
+sudo systemctl start esnode-sentinel
 
 # Stop
-sudo systemctl stop esnode-core
+sudo systemctl stop esnode-sentinel
 
 # Enable at boot
-sudo systemctl enable esnode-core
+sudo systemctl enable esnode-sentinel
 
 # Status
-sudo systemctl status esnode-core
+sudo systemctl status esnode-sentinel
 
 # Logs
-sudo journalctl -u esnode-core -f
+sudo journalctl -u esnode-sentinel -f
 ```
 
 **Features:**
@@ -249,17 +249,17 @@ sudo journalctl -u esnode-core -f
 
 ### macOS (launchd)
 
-**Plist File:** `/Library/LaunchDaemons/com.estimatedstocks.esnode-core.plist`
+**Plist File:** `/Library/LaunchDaemons/com.estimatedstocks.esnode-sentinel.plist`
 
 ```bash
 # Load (start)
-sudo launchctl load /Library/LaunchDaemons/com.estimatedstocks.esnode-core.plist
+sudo launchctl load /Library/LaunchDaemons/com.estimatedstocks.esnode-sentinel.plist
 
 # Unload (stop)
-sudo launchctl unload /Library/LaunchDaemons/com.estimatedstocks.esnode-core.plist
+sudo launchctl unload /Library/LaunchDaemons/com.estimatedstocks.esnode-sentinel.plist
 
 # View logs
-tail -f /var/log/esnode/esnode-core.log
+tail -f /var/log/esnode/esnode-sentinel.log
 ```
 
 **Features:**
@@ -365,14 +365,14 @@ export ESNODE_LOG_LEVEL="debug"
 
 1. **Create GitHub Release**
    - Tag: `v0.2.0`
-   - Title: "ESNODE-Core v0.2.0 - Brand Modernization"
+   - Title: "ESNODE Sentinel v0.2.0 - Brand Modernization"
    - Description: From `RELEASE_NOTES-v0.2.0.md`
 
 2. **Upload Artifacts**
-   - [ ] esnode-core-darwin-arm64-v0.1.0.tar.gz
-   - [ ] esnode-core-darwin-amd64-v0.1.0.tar.gz
-   - [ ] esnode-core-linux-amd64-v0.2.0.tar.gz (when built)
-   - [ ] esnode-core-linux-arm64-v0.2.0.tar.gz (when built)
+   - [ ] esnode-sentinel-darwin-arm64-v0.1.0.tar.gz
+   - [ ] esnode-sentinel-darwin-amd64-v0.1.0.tar.gz
+   - [ ] esnode-sentinel-linux-amd64-v0.2.0.tar.gz (when built)
+   - [ ] esnode-sentinel-linux-arm64-v0.2.0.tar.gz (when built)
    - [x] SHA256SUMS-v0.1.0.txt
    - [x] RELEASE_NOTES-v0.2.0.md
 
@@ -505,9 +505,9 @@ export ESNODE_LOG_LEVEL="debug"
 
 ## Support & Contact
 
-**GitHub Repository:** https://github.com/ESNODE/ESNODE-Core  
-**Documentation:** https://github.com/ESNODE/ESNODE-Core/tree/main/docs  
-**Issues:** https://github.com/ESNODE/ESNODE-Core/issues  
+**GitHub Repository:** https://github.com/ESNODE/ESNODE Sentinel  
+**Documentation:** https://github.com/ESNODE/ESNODE Sentinel/tree/main/docs  
+**Issues:** https://github.com/ESNODE/ESNODE Sentinel/issues  
 **License:** BUSL-1.1 (Source Available)  
 
 **Maintainer:** Estimatedstocks AB  
@@ -517,7 +517,7 @@ export ESNODE_LOG_LEVEL="debug"
 
 ## Conclusion
 
-ESNODE-Core v0.2.0 represents a significant milestone in the project's evolution:
+ESNODE Sentinel v0.2.0 represents a significant milestone in the project's evolution:
 
 ✅ **Professional Branding** - Enterprise-grade visual identity  
 ✅ **Modern TUI** - Cloud-provider-quality interface  

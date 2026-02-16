@@ -50,11 +50,11 @@ All notable changes to this project will be documented here.
 
 ### Added - AIOps & Predictive Maintenance (2026-02-09)
 - **Automated Root Cause Analysis (RCA)**: Real-time correlation of GPU performance dips with network packet loss and thermal throttling events
-  - New module: `crates/agent-core/src/rca.rs`
+  - New module: `crates/sentinel-core/src/rca.rs`
   - Metric: `esnode_rca_detections_total` with labels `cause` and `confidence`
   - Sliding window analysis (5-minute default) with autonomous detection every scrape cycle
 - **Predictive Maintenance Engine**: ML-based failure risk scoring for GPUs
-  - New module: `crates/agent-core/src/predictive.rs`
+  - New module: `crates/sentinel-core/src/predictive.rs`
   - Metric: `esnode_gpu_failure_risk_score` (0-100 scale) per GPU UUID
   - Risk factors: Uncorrected ECC errors, corrected ECC rate trends, thermal throttling frequency, memory page retirement
   - Automatic alerting when risk score >= 50.0
@@ -67,12 +67,12 @@ All notable changes to this project will be documented here.
 - TSDB export now snapshots the current block without closing it, preventing index resets and missing samples when exporting mid-window.
 - Orchestrator control API is loopback-only by default; set `orchestrator.allow_public=true` to expose `/orchestrator/*` on non-loopback listeners and `orchestrator.token` to require bearer auth.
 - Added swap/disk/network degradation flags, aggregate degradation score, and audit logging on orchestrator actions; created a living gap logbook (`docs/gap-logbook.md`).
-- Add GitHub Actions release pipeline, packaging via `scripts/dist/esnode-core-release.sh`, and artifact checksums.
+- Add GitHub Actions release pipeline, packaging via `scripts/dist/esnode-sentinel-release.sh`, and artifact checksums.
 - Expanded GPU/MIG telemetry, K8s compatibility labels, and NVML FFI scaffolding.
 - Added contributor documentation (CONTRIBUTING.md, CODE_OF_CONDUCT.md) and security policy.
 
 ## [v0.1.0] - 2024-xx-xx
-- Initial public source-available release of ESNODE-Core (BUSL-1.1).
+- Initial public source-available release of ESNODE Sentinel (BUSL-1.1).
 
 _Fill in dated sections when tagging releases._
 

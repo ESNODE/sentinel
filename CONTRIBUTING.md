@@ -1,4 +1,4 @@
-# Contributing to ESNODE-Core
+# Contributing to ESNODE Sentinel
 
 Welcome! This project is source-available under the ESNODE BUSL-1.1 license with additional commercial and trademark restrictions. Please read this guide before opening issues or sending patches.
 
@@ -24,7 +24,7 @@ Welcome! This project is source-available under the ESNODE BUSL-1.1 license with
 
 ## Release & tagging
 - Official releases are cut by maintainers. Tagging `vX.Y.Z` triggers CI to build and publish binaries (see `.github/workflows/release.yml`). External contributors should not tag releases.
-- To test packaging locally, run `scripts/dist/esnode-core-release.sh` (optionally set `ESNODE_VERSION=X.Y.Z`).
+- To test packaging locally, run `scripts/dist/esnode-sentinel-release.sh` (optionally set `ESNODE_VERSION=X.Y.Z`).
 
 ## Pull request checklist
 - [ ] Issue linked or clear rationale provided.
@@ -33,4 +33,4 @@ Welcome! This project is source-available under the ESNODE BUSL-1.1 license with
 - [ ] No new secrets or proprietary assets added.
 - [ ] CLA accepted by submitting the PR.
 
-Thank you for helping improve ESNODE-Core!
+Thank you for helping improve ESNODE Sentinel!

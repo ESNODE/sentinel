@@ -1,0 +1,12 @@
+[tags]
+env = "lab"
+lab_id = "ai-cluster-01"
+
+scrape_interval = "1s"
+enable_cpu = true
+enable_gpu = true
+
+[[wasm_skills]]
+name = "custom-sensor-monitor"
+path = "target/wasm32-unknown-unknown/debug/wasm_sample.wasm"
+params = { "threshold" = "50", "alert_channel" = "slack" }

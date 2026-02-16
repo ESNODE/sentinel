@@ -1,6 +1,6 @@
-# ESNODE-Core
+# ESNODE Sentinel
 
-This repository contains the source, build tooling, and documentation for the ESNODE-Core Agent.
+This repository contains the source, build tooling, and documentation for the ESNODE Sentinel Agent.
 
 **Supported server OS targets (AI infra focused)**
 - Ubuntu Server (primary)
@@ -9,7 +9,7 @@ This repository contains the source, build tooling, and documentation for the ES
 - SUSE Linux Enterprise Server (SLES)
 - Debian
 
-ESNODE-Core is a GPU-aware host metrics exporter for Linux nodes. It exposes CPU, memory, disk, network, and GPU telemetry at `/metrics` in Prometheus text format.
+ESNODE Sentinel is a GPU-aware host metrics exporter for Linux nodes. It exposes CPU, memory, disk, network, and GPU telemetry at `/metrics` in Prometheus text format.
 
 ## Features
 - Single binary with zero-config defaults (`0.0.0.0:9100`, 5s interval).
@@ -22,15 +22,15 @@ ESNODE-Core is a GPU-aware host metrics exporter for Linux nodes. It exposes CPU
 
 ```bash
 docker run -d \
-  --name esnode-core \
+  --name esnode-sentinel \
   --net=host \
   --pid=host \
   --privileged \
   -v /:/host:ro,rslave \
-  esnodecore/esnode-core:latest
+  esnodecore/esnode-sentinel:latest
 ```
 
 *Note: Privileged mode and host PID/network are recommended for full metric visibility (GPU, RAPL, etc).*
 
 ## Documentation
-For full documentation, please visit the [GitHub Repository](https://github.com/ESNODE/ESNODE-Core).
+For full documentation, please visit the [GitHub Repository](https://github.com/ESNODE/ESNODE Sentinel).

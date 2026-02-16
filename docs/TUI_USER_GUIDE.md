@@ -17,15 +17,15 @@ The ESNODE Terminal User Interface (TUI) provides real-time infrastructure monit
 ### Launch the TUI
 
 ```bash
-# From the ESNODE-Core directory
-./target/release/esnode-core cli
+# From the ESNODE Sentinel directory
+./target/release/esnode-sentinel cli
 
 # Or if installed system-wide
-esnode-core cli
+esnode-sentinel cli
 ```
 
 ### Prerequisites
-- **Agent Daemon:** Must be running (`esnode-core daemon`)
+- **Agent Daemon:** Must be running (`esnode-sentinel daemon`)
 - **Terminal:** Modern terminal with Unicode and color support
 - **Minimum Size:** 80x24 characters (recommended: 120x40)
 
@@ -309,7 +309,7 @@ esnode-core cli
 ### B&W Mode
 To enable black-and-white mode (for terminals without color support):
 ```bash
-esnode-core cli --no-color
+esnode-sentinel cli --no-color
 ```
 
 ---
@@ -321,8 +321,8 @@ esnode-core cli --no-color
 **Cause:** Agent daemon is not running or not reachable
 
 **Solutions:**
-1. Start the daemon: `esnode-core daemon`
-2. Check daemon status: `systemctl status esnode-core`
+1. Start the daemon: `esnode-sentinel daemon`
+2. Check daemon status: `systemctl status esnode-sentinel`
 3. Verify port 9100 is listening: `netstat -tuln | grep 9100`
 
 ### Issue: Garbled or missing characters
@@ -411,14 +411,14 @@ The TUI connects to the local agent daemon via HTTP:
 
 **Current Version:** v0.2.0  
 **Release Date:** 2026-02-07  
-**Compatible Agent:** ESNODE-Core v0.2+  
+**Compatible Agent:** ESNODE Sentinel v0.2+  
 
 ---
 
 ## Support
 
-**Documentation:** [GitHub Repository](https://github.com/ESNODE/ESNODE-Core)  
-**Issues:** [Report Bugs](https://github.com/ESNODE/ESNODE-Core/issues)  
+**Documentation:** [GitHub Repository](https://github.com/ESNODE/ESNODE Sentinel)  
+**Issues:** [Report Bugs](https://github.com/ESNODE/ESNODE Sentinel/issues)  
 **License:** BUSL-1.1 (Source Available)  
 
 ---

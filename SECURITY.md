@@ -1,4 +1,4 @@
-# ESNODE-Core Security Policy
+# ESNODE Sentinel Security Policy
 
 **Document Version:** 1.0  
 **Last Updated:** 2026-02-09  
@@ -9,13 +9,13 @@
 
 ## Overview
 
-This document outlines the security policies, practices, and vulnerability disclosure procedures for ESNODE-Core. As enterprise-grade infrastructure software, security is our highest priority.
+This document outlines the security policies, practices, and vulnerability disclosure procedures for ESNODE Sentinel. As enterprise-grade infrastructure software, security is our highest priority.
 
 ---
 
 ## 1. Security Commitment
 
-ESNODE-Core is designed with security-first principles:
+ESNODE Sentinel is designed with security-first principles:
 
 ✅ **Memory Safety:** Written in Rust to eliminate entire classes of vulnerabilities  
 ✅ **Principle of Least Privilege:** Minimal permissions required  
@@ -182,8 +182,8 @@ ufw deny 9100/tcp
 ```bash
 # Create custom SELinux policy module
 # (Enterprise customers: contact support for production policy)
-semanage fcontext -a -t esnode_exec_t '/usr/local/bin/esnode-core'
-restorecon -v /usr/local/bin/esnode-core
+semanage fcontext -a -t esnode_exec_t '/usr/local/bin/esnode-sentinel'
+restorecon -v /usr/local/bin/esnode-sentinel
 ```
 
 ### Secret Management
@@ -206,7 +206,7 @@ restorecon -v /usr/local/bin/esnode-core
 export ESNODE_ORCHESTRATOR_TOKEN=$(vault kv get -field=token secret/esnode/orchestrator)
 
 # Start agent
-esnode-core
+esnode-sentinel
 ```
 
 ### Certificate Management
@@ -266,11 +266,11 @@ None as of 2026-02-09.
 codesign --sign "Developer ID Application" \
   --timestamp \
   --options runtime \
-  target/release/esnode-core
+  target/release/esnode-sentinel
 
 # Verify signature
 codesign --verify --deep --strict --verbose=2 \
-  target/release/esnode-core
+  target/release/esnode-sentinel
 ```
 
 ---
@@ -326,7 +326,7 @@ jobs:
 **Phase 2: Containment**
 ```bash
 # Immediately disable control API if compromised
-sudo systemctl stop esnode-core
+sudo systemctl stop esnode-sentinel
 
 # Rotate compromised credentials
 vault kv put secret/esnode/orchestrator token="$(openssl rand -base64 32)"

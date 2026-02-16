@@ -1,4 +1,4 @@
-# ESNODE-Core Installation Guide
+# ESNODE Sentinel Installation Guide
 
 <div align="center">
   <img src="docs/images/esnode-logo-dark.png" alt="ESNODE" width="500"/>
@@ -68,11 +68,11 @@ Download and run the installation script:
 
 ```bash
 # Download release
-wget https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
+wget https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
 
 # Extract
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
-cd esnode-core-linux-amd64-v0.2.0
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+cd esnode-sentinel-linux-amd64-v0.2.0
 
 # Install (requires root)
 sudo ./install.sh
@@ -87,11 +87,11 @@ INSTALL_DIR=$HOME/.local/bin ./install.sh
 
 ```bash
 # Extract binary
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
 
 # Copy to system
-sudo cp esnode-core-linux-amd64-v0.2.0/esnode-core /usr/local/bin/
-sudo chmod +x /usr/local/bin/esnode-core
+sudo cp esnode-sentinel-linux-amd64-v0.2.0/esnode-sentinel /usr/local/bin/
+sudo chmod +x /usr/local/bin/esnode-sentinel
 
 # Create directories
 sudo mkdir -p /etc/esnode
@@ -109,14 +109,14 @@ sudo chown -R esnode:esnode /var/lib/esnode /var/log/esnode
 
 ```bash
 # Clone repository
-git clone https://github.com/ESNODE/ESNODE-Core.git
-cd ESNODE-Core
+git clone https://github.com/ESNODE/ESNODE Sentinel.git
+cd ESNODE Sentinel
 
 # Build release
 cargo build --release -p agent-bin
 
 # Install
-sudo cp target/release/esnode-core /usr/local/bin/
+sudo cp target/release/esnode-sentinel /usr/local/bin/
 ```
 
 ---
@@ -127,13 +127,13 @@ sudo cp target/release/esnode-core /usr/local/bin/
 
 **Foreground (testing):**
 ```bash
-esnode-core daemon
+esnode-sentinel daemon
 ```
 
 **Background (systemd):**
 ```bash
-sudo systemctl start esnode-core
-sudo systemctl enable esnode-core  # Enable at boot
+sudo systemctl start esnode-sentinel
+sudo systemctl enable esnode-sentinel  # Enable at boot
 ```
 
 ### 2. Verify Operation
@@ -152,7 +152,7 @@ curl http://localhost:9100/status | jq
 ### 3. Launch TUI
 
 ```bash
-esnode-core cli
+esnode-sentinel cli
 ```
 
 Use arrow keys to navigate between screens.
@@ -165,30 +165,30 @@ Use arrow keys to navigate between screens.
 
 ```bash
 # Download
-wget https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
+wget https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
 
 # Extract and install
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
-cd esnode-core-linux-amd64-v0.2.0
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+cd esnode-sentinel-linux-amd64-v0.2.0
 sudo ./install.sh
 
 # Start service
-sudo systemctl start esnode-core
-sudo systemctl status esnode-core
+sudo systemctl start esnode-sentinel
+sudo systemctl status esnode-sentinel
 
 # View logs
-sudo journalctl -u esnode-core -f
+sudo journalctl -u esnode-sentinel -f
 ```
 
 ### RHEL / Rocky / AlmaLinux
 
 ```bash
 # Download
-curl -LO https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
+curl -LO https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
 
 # Extract and install
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
-cd esnode-core-linux-amd64-v0.2.0
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+cd esnode-sentinel-linux-amd64-v0.2.0
 sudo ./install.sh
 
 # Configure firewall (if needed)
@@ -196,37 +196,37 @@ sudo firewall-cmd --add-port=9100/tcp --permanent
 sudo firewall-cmd --reload
 
 # Start service
-sudo systemctl start esnode-core
-sudo systemctl enable esnode-core
+sudo systemctl start esnode-sentinel
+sudo systemctl enable esnode-sentinel
 ```
 
 ### macOS
 
 ```bash
 # Download (ARM64 for M1/M2)
-curl -LO https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-darwin-arm64-v0.2.0.tar.gz
+curl -LO https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-darwin-arm64-v0.2.0.tar.gz
 
 # Extract and install
-tar -xzf esnode-core-darwin-arm64-v0.2.0.tar.gz
-cd esnode-core-darwin-arm64-v0.2.0
+tar -xzf esnode-sentinel-darwin-arm64-v0.2.0.tar.gz
+cd esnode-sentinel-darwin-arm64-v0.2.0
 sudo ./install.sh
 
 # Start service
-sudo launchctl load /Library/LaunchDaemons/com.estimatedstocks.esnode-core.plist
+sudo launchctl load /Library/LaunchDaemons/com.estimatedstocks.esnode-sentinel.plist
 ```
 
 ### NVIDIA DGX
 
 ```bash
 # DGX OS is Ubuntu-based
-wget https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
-cd esnode-core-linux-amd64-v0.2.0
+wget https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+cd esnode-sentinel-linux-amd64-v0.2.0
 sudo ./install.sh
 
 # Enable GPU metrics (already default)
 # Verify GPU detection
-esnode-core status | jq '.gpus'
+esnode-sentinel status | jq '.gpus'
 ```
 
 ---
@@ -314,51 +314,51 @@ export ESNODE_CONFIG="/custom/path/config.toml"
 
 ```bash
 # Start
-sudo systemctl start esnode-core
+sudo systemctl start esnode-sentinel
 
 # Stop
-sudo systemctl stop esnode-core
+sudo systemctl stop esnode-sentinel
 
 # Restart
-sudo systemctl restart esnode-core
+sudo systemctl restart esnode-sentinel
 
 # Status
-sudo systemctl status esnode-core
+sudo systemctl status esnode-sentinel
 
 # Enable at boot
-sudo systemctl enable esnode-core
+sudo systemctl enable esnode-sentinel
 
 # Disable at boot
-sudo systemctl disable esnode-core
+sudo systemctl disable esnode-sentinel
 
 # View logs
-sudo journalctl -u esnode-core -f
+sudo journalctl -u esnode-sentinel -f
 
 # View recent errors
-sudo journalctl -u esnode-core -p err -n 50
+sudo journalctl -u esnode-sentinel -p err -n 50
 ```
 
 ### launchd (macOS)
 
 ```bash
 # Load (start)
-sudo launchctl load /Library/LaunchDaemons/com.estimatedstocks.esnode-core.plist
+sudo launchctl load /Library/LaunchDaemons/com.estimatedstocks.esnode-sentinel.plist
 
 # Unload (stop)
-sudo launchctl unload /Library/LaunchDaemons/com.estimatedstocks.esnode-core.plist
+sudo launchctl unload /Library/LaunchDaemons/com.estimatedstocks.esnode-sentinel.plist
 
 # View logs
-tail -f /var/log/esnode/esnode-core.log
+tail -f /var/log/esnode/esnode-sentinel.log
 ```
 
 ### Manual Daemon
 
 ```bash
 # Start in background
-nohup esnode-core daemon > /var/log/esnode/esnode-core.log 2>&1 &
+nohup esnode-sentinel daemon > /var/log/esnode/esnode-sentinel.log 2>&1 &
 
 # Stop
-pkill -f esnode-core
+pkill -f esnode-sentinel
 ```
 
 ---
@@ -369,29 +369,29 @@ pkill -f esnode-core
 
 ```bash
 # Version check
-esnode-core --version
+esnode-sentinel --version
 
 # Help
-esnode-core --help
+esnode-sentinel --help
 
 # Test configuration
-esnode-core daemon --config /etc/esnode/config.toml &
+esnode-sentinel daemon --config /etc/esnode/config.toml &
 sleep 5
 curl http://localhost:9100/health
-pkill -f esnode-core
+pkill -f esnode-sentinel
 ```
 
 ### Verify GPU Detection
 
 ```bash
 # Check GPU status
-esnode-core status | jq '.gpus'
+esnode-sentinel status | jq '.gpus'
 
 # Or via metrics
 curl http://localhost:9100/metrics | grep gpu_utilization
 
 # TUI GPU screen
-esnode-core cli  # Navigate to "GPU & Power"
+esnode-sentinel cli  # Navigate to "GPU & Power"
 ```
 
 ### Test Metrics Export
@@ -411,13 +411,13 @@ curl -s http://localhost:9100/metrics | grep esnode_cpu_percent
 
 ```bash
 # CPU usage
-top -p $(pgrep esnode-core)
+top -p $(pgrep esnode-sentinel)
 
 # Memory usage
-ps aux | grep esnode-core
+ps aux | grep esnode-sentinel
 
 # Number of open files
-lsof -p $(pgrep esnode-core) | wc -l
+lsof -p $(pgrep esnode-sentinel) | wc -l
 ```
 
 ---
@@ -433,7 +433,7 @@ lsof -p $(pgrep esnode-core) | wc -l
 **Solution:**
 ```bash
 # Make executable
-chmod +x /usr/local/bin/esnode-core
+chmod +x /usr/local/bin/esnode-sentinel
 
 # Add to PATH
 echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
@@ -453,7 +453,7 @@ nvidia-smi
 ls -l /dev/nvidia*
 
 # Check permissions (may need to run as root initially)
-sudo esnode-core daemon
+sudo esnode-sentinel daemon
 
 # Add user to GPU group (Debian/Ubuntu)
 sudo usermod -a -G video esnode
@@ -483,13 +483,13 @@ echo 'listen_address = "0.0.0.0:9101"' >> /etc/esnode/config.toml
 **Solutions:**
 ```bash
 # Verify daemon is running
-ps aux | grep esnode-core
+ps aux | grep esnode-sentinel
 
 # Check if metrics endpoint responds
 curl http://localhost:9100/status
 
 # Start daemon if not running
-sudo systemctl start esnode-core
+sudo systemctl start esnode-sentinel
 ```
 
 #### 5. High Memory Usage
@@ -515,20 +515,20 @@ Enable debug logging for troubleshooting:
 
 ```bash
 # Via environment variable
-ESNODE_LOG_LEVEL=debug esnode-core daemon
+ESNODE_LOG_LEVEL=debug esnode-sentinel daemon
 
 # Via config
 echo 'log_level = "debug"' >> /etc/esnode/config.toml
-sudo systemctl restart esnode-core
+sudo systemctl restart esnode-sentinel
 
 # View debug logs
-sudo journalctl -u esnode-core -f
+sudo journalctl -u esnode-sentinel -f
 ```
 
 ### Getting Help
 
-- **GitHub Issues:** [Report bugs](https://github.com/ESNODE/ESNODE-Core/issues)
-- **Documentation:** [User guides](https://github.com/ESNODE/ESNODE-Core/tree/main/docs)
+- **GitHub Issues:** [Report bugs](https://github.com/ESNODE/ESNODE Sentinel/issues)
+- **Documentation:** [User guides](https://github.com/ESNODE/ESNODE Sentinel/tree/main/docs)
 - **TUI Guide:** `docs/TUI_USER_GUIDE.md`
 
 ---
@@ -539,25 +539,25 @@ sudo journalctl -u esnode-core -f
 
 ```bash
 # Stop service
-sudo systemctl stop esnode-core
+sudo systemctl stop esnode-sentinel
 
 # Backup configuration
 sudo cp /etc/esnode/config.toml /etc/esnode/config.toml.backup
 
 # Download new version
-wget https://github.com/ESNODE/ESNODE-Core/releases/download/v0.2.0/esnode-core-linux-amd64-v0.2.0.tar.gz
-tar -xzf esnode-core-linux-amd64-v0.2.0.tar.gz
+wget https://github.com/ESNODE/ESNODE Sentinel/releases/download/v0.2.0/esnode-sentinel-linux-amd64-v0.2.0.tar.gz
+tar -xzf esnode-sentinel-linux-amd64-v0.2.0.tar.gz
 
 # Replace binary
-sudo cp esnode-core-linux-amd64-v0.2.0/esnode-core /usr/local/bin/
-sudo chmod +x /usr/local/bin/esnode-core
+sudo cp esnode-sentinel-linux-amd64-v0.2.0/esnode-sentinel /usr/local/bin/
+sudo chmod +x /usr/local/bin/esnode-sentinel
 
 # Restart service
-sudo systemctl start esnode-core
-sudo systemctl status esnode-core
+sudo systemctl start esnode-sentinel
+sudo systemctl status esnode-sentinel
 
 # Verify TUI
-esnode-core cli  # Should show new branding
+esnode-sentinel cli  # Should show new branding
 ```
 
 **Breaking Changes:**
@@ -569,14 +569,14 @@ esnode-core cli  # Should show new branding
 
 ```bash
 # Stop and disable service
-sudo systemctl stop esnode-core
-sudo systemctl disable esnode-core
+sudo systemctl stop esnode-sentinel
+sudo systemctl disable esnode-sentinel
 
 # Remove binary
-sudo rm /usr/local/bin/esnode-core
+sudo rm /usr/local/bin/esnode-sentinel
 
 # Remove service file
-sudo rm /etc/systemd/system/esnode-core.service
+sudo rm /etc/systemd/system/esnode-sentinel.service
 sudo systemctl daemon-reload
 
 # Remove data (optional)
@@ -618,8 +618,8 @@ sudo chown esnode:esnode /var/lib/esnode
 
 ```bash
 # If SELinux blocks operation
-sudo semanage fcontext -a -t bin_t "/usr/local/bin/esnode-core"
-sudo restorecon -v /usr/local/bin/esnode-core
+sudo semanage fcontext -a -t bin_t "/usr/local/bin/esnode-sentinel"
+sudo restorecon -v /usr/local/bin/esnode-sentinel
 ```
 
 ---
@@ -629,7 +629,7 @@ sudo restorecon -v /usr/local/bin/esnode-core
 BUSL-1.1 (Business Source License)  
 Copyright (c) 2024 Estimatedstocks AB
 
-Source available at: https://github.com/ESNODE/ESNODE-Core
+Source available at: https://github.com/ESNODE/ESNODE Sentinel
 
 ---
 

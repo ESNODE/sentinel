@@ -1,0 +1,10 @@
+[package]
+name = "sentinel-skill-snmp"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+sentinel-core = { version = "0.1.0", path = "../../crates/sentinel-core" }
+anyhow = "1.0.101"
+async-trait = "0.1.89"
+tokio = { version = "1.49.0", features = ["full"] }

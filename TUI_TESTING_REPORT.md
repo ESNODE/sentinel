@@ -1,4 +1,4 @@
-# ESNODE-Core TUI Modernization - Testing Report
+# ESNODE Sentinel TUI Modernization - Testing Report
 
 **Date:** 2026-02-07  
 **Version:** v0.2 (Post-Modernization)  
@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-Successfully completed modernization of the ESNODE-Core Terminal User Interface (TUI) from legacy text-based rendering to a modern, GUI-centric dashboard using Ratatui widgets. The new interface provides improved usability, visual clarity, and a professional appearance suitable for production data center environments.
+Successfully completed modernization of the ESNODE Sentinel Terminal User Interface (TUI) from legacy text-based rendering to a modern, GUI-centric dashboard using Ratatui widgets. The new interface provides improved usability, visual clarity, and a professional appearance suitable for production data center environments.
 
 ---
 
@@ -32,7 +32,7 @@ cargo build --release -p agent-bin
 
 **Command:**
 ```bash
-./target/release/esnode-core cli
+./target/release/esnode-sentinel cli
 ```
 
 **Result:** Application launched successfully  
@@ -237,7 +237,7 @@ Finished `release` profile [optimized] target(s) in 26.72s
 **Warnings:**
 1. `unreachable_patterns` in match statement (expected - all screens covered)
 2. `dead_code` for unused struct fields (benign - reserved for future use)
-3. `unused_imports` in agent-core (unrelated to TUI changes)
+3. `unused_imports` in sentinel-core (unrelated to TUI changes)
 
 ---
 
@@ -284,7 +284,7 @@ Finished `release` profile [optimized] target(s) in 26.72s
 ### Minor Issues (Non-blocking)
 1. Daemon crash on startup due to duplicate metrics registration
    - **Workaround:** TUI operates in offline mode showing connection status
-   - **Fix Required:** Resolve metrics collector initialization in agent-core
+   - **Fix Required:** Resolve metrics collector initialization in sentinel-core
 
 2. Unused struct fields generate warnings
    - **Impact:** Cosmetic only
@@ -315,8 +315,8 @@ Finished `release` profile [optimized] target(s) in 26.72s
 **Deployment Steps:**
 1. Build release binary: `cargo build --release -p agent-bin`
 2. Deploy to target systems
-3. Ensure agent daemon is running: `esnode-core daemon`
-4. Launch TUI: `esnode-core cli`
+3. Ensure agent daemon is running: `esnode-sentinel daemon`
+4. Launch TUI: `esnode-sentinel cli`
 
 **Recommended Testing Before Wide Rollout:**
 - ✅ macOS ARM64 (tested)
@@ -327,7 +327,7 @@ Finished `release` profile [optimized] target(s) in 26.72s
 
 ## Conclusion
 
-The ESNODE-Core TUI modernization has been **successfully completed and tested**. The new dashboard provides a significantly improved user experience with modern widget-based rendering, intuitive navigation, and professional visual design. The application is ready for production deployment with the minor caveat of resolving the daemon startup issue for full end-to-end testing with live data.
+The ESNODE Sentinel TUI modernization has been **successfully completed and tested**. The new dashboard provides a significantly improved user experience with modern widget-based rendering, intuitive navigation, and professional visual design. The application is ready for production deployment with the minor caveat of resolving the daemon startup issue for full end-to-end testing with live data.
 
 **Overall Assessment:** ✅ **PRODUCTION READY**
 

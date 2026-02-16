@@ -1,4 +1,4 @@
-# ESNODE-Core Enterprise Certification Report
+# ESNODE Sentinel Enterprise Certification Report
 
 **Document Type:** Enterprise Adoption Readiness Certification  
 **Version:** 1.0.0  
@@ -12,7 +12,7 @@
 
 **CERTIFICATION STATUS: ✅ APPROVED FOR ENTERPRISE DEPLOYMENT**
 
-ESNODE-Core has been certified as meeting the stringent requirements for adoption by Fortune 500 companies and mega-cap corporations. This enterprise-grade observability platform is production-ready for deployment in mission-critical AI infrastructure environments.
+ESNODE Sentinel has been certified as meeting the stringent requirements for adoption by Fortune 500 companies and mega-cap corporations. This enterprise-grade observability platform is production-ready for deployment in mission-critical AI infrastructure environments.
 
 ### Certification Scope
 
@@ -127,7 +127,7 @@ This certification covers:
 
 ### Build Verification
 
-**Binary Name:** `esnode-core`  
+**Binary Name:** `esnode-sentinel`  
 **Version:** 1.0.0-1  
 **Size:** 9.8 MB (optimized release)  
 **Platform:** darwin/arm64 (multi-platform capable)  
@@ -268,9 +268,9 @@ This certification covers:
 
 ### Market Position
 
-**ESNODE-Core vs. Alternatives:**
+**ESNODE Sentinel vs. Alternatives:**
 
-| Feature | ESNODE-Core | Prometheus Node Exporter | NVIDIA DCGM | Proprietary Solutions |
+| Feature | ESNODE Sentinel | Prometheus Node Exporter | NVIDIA DCGM | Proprietary Solutions |
 |---------|-------------|--------------------------|-------------|----------------------|
 | GPU Metrics | ✅ Full | ❌ No | ✅ NVIDIA only | ✅ Limited |
 | Power/Energy | ✅ Yes | ❌ No | ✅ Yes | ⚠ Partial |
@@ -289,7 +289,7 @@ This certification covers:
 
 ### Cost Analysis (1000-node cluster, 3 years)
 
-**ESNODE-Core:**
+**ESNODE Sentinel:**
 - Software license: Source-available (BUSL-1.1, converts to Apache 2.0 after 4 years)
 - Support (Platinum): $50K/year × 3 = $150K
 - Implementation: $25K (one-time)
@@ -331,7 +331,7 @@ This certification covers:
 
 ## 13. Certification Statement
 
-**We hereby certify that ESNODE-Core version 1.0.0 meets all requirements for enterprise deployment in Fortune 500 and mega-cap corporate environments.**
+**We hereby certify that ESNODE Sentinel version 1.0.0 meets all requirements for enterprise deployment in Fortune 500 and mega-cap corporate environments.**
 
 This software is suitable for:
 ✅ Production AI/ML infrastructure  
@@ -348,7 +348,7 @@ This software is suitable for:
 ## 14. Contact Information
 
 **Vendor:** Estimatedstocks AB  
-**Product:** ESNODE-Core  
+**Product:** ESNODE Sentinel  
 **License:** BUSL-1.1 (converts to Apache 2.0 after 4 years)
 
 **Support Channels:**
@@ -360,7 +360,7 @@ This software is suitable for:
 **Online Resources:**
 - Product Website: https://esnode.io
 - Documentation: https://docs.esnode.io
-- GitHub: https://github.com/estimatedstocks/esnode-core
+- GitHub: https://github.com/estimatedstocks/esnode-sentinel
 - Community: https://community.esnode.io
 
 ---
@@ -400,4 +400,4 @@ This software is suitable for:
 
 ---
 
-*This certification report validates that ESNODE-Core meets the highest standards required by Fortune 500 companies, mega-cap corporations, and regulated industries worldwide.*
+*This certification report validates that ESNODE Sentinel meets the highest standards required by Fortune 500 companies, mega-cap corporations, and regulated industries worldwide.*

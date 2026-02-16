@@ -273,4 +273,4 @@ When creating new materials, ensure:
 
 **Maintained by:** ESNODE Team  
 **Last Updated:** 2026-02-07  
-**Contact:** [Repository Issues](https://github.com/ESNODE/ESNODE-Core/issues)
+**Contact:** [Repository Issues](https://github.com/ESNODE/ESNODE Sentinel/issues)

@@ -1,4 +1,4 @@
-# Code Quality Report - ESNODE-Core
+# Code Quality Report - ESNODE Sentinel
 
 **Date:** 2026-02-09  
 **Status:** ✅ PRODUCTION READY
@@ -7,7 +7,7 @@
 
 ## Summary
 
-The ESNODE-Core codebase has been thoroughly audited and cleaned. All critical issues have been resolved, dead code removed, and the project is error-free with comprehensive test coverage.
+The ESNODE Sentinel codebase has been thoroughly audited and cleaned. All critical issues have been resolved, dead code removed, and the project is error-free with comprehensive test coverage.
 
 ---
 
@@ -31,7 +31,7 @@ cargo test --workspace
 **Failed:** 0  
 
 ### Test Breakdown:
-- **agent-core**: 5 tests (rca, predictive, control, policy, nvml)
+- **sentinel-core**: 5 tests (rca, predictive, control, policy, nvml)
 - **agent-bin**: 6 tests (CLI parsing, client)
 - **Integration tests**: 7 tests (config, policy, orchestrator)
 
@@ -132,7 +132,7 @@ cargo clippy --workspace --all-targets
 
 **Status:** ✅ **PRODUCTION READY**
 
-The ESNODE-Core codebase is:
+The ESNODE Sentinel codebase is:
 - **Error-free** with zero compilation errors
 - **Well-tested** with 100% test pass rate
 - **Clean** with no dead code or unused imports

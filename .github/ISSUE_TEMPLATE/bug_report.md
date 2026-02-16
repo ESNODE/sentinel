@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a problem with ESNODE-Core
+about: Report a problem with ESNODE Sentinel
 labels: bug
 ---
 
@@ -18,7 +18,7 @@ Please avoid secrets. Attach relevant snippets.
 **Environment**
 - OS / kernel:
 - GPU model / driver / CUDA:
-- ESNODE-Core version (tag/commit):
+- ESNODE Sentinel version (tag/commit):
 - Config flags (GPU/MIG/events/k8s_mode):
 
 **Additional context**

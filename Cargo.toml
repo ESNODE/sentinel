@@ -1,7 +1,12 @@
-[workspace] # ESNODE | Source Available BUSL-1.1 | Copyright (c) 2025 Estimatedstocks AB
+[workspace] # ESNODE Sentinel | Source Available BUSL-1.1 | Copyright (c) 2025 Estimatedstocks AB
 resolver = "2"
+
 members = [
-    "crates/agent-core",
-    "crates/agent-bin",
-    "ESNODE-Orchestrator", "crates/esnode-modbus", "crates/esnode-dnp3", "crates/esnode-snmp", "crates/esnode-mqtt",
+    "apps/sentinel-cli",
+    "crates/sentinel-core",
+    "crates/sentinel-orchestrator",
+    "skills/modbus",
+    "skills/dnp3",
+    "skills/snmp",
+    "skills/mqtt", "skills/wasm_sample",
 ]
