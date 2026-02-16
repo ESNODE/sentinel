@@ -1,5 +1,5 @@
 // ESNODE | Source Available BUSL-1.1 | Copyright (c) 2024 Estimatedstocks AB
-use std::collections::VecDeque;
+use std::collections::{VecDeque, HashMap};
 use std::sync::{
     atomic::{AtomicBool, AtomicU64, Ordering},
     Arc, RwLock,
@@ -24,6 +24,8 @@ pub struct StatusState {
     // AIOps data
     rca_events: Arc<RwLock<Vec<AIOpsRcaEvent>>>,
     risk_assessments: Arc<RwLock<Vec<AIOpsRiskAssessment>>>,
+    // IoT Sensor data
+    iot_sensors: Arc<RwLock<HashMap<String, f64>>>,
 }
 
 // AIOps: Root Cause Analysis Event
@@ -107,6 +109,9 @@ pub struct StatusSnapshot {
     // AIOps: Predictive maintenance risk scores
     #[serde(default)]
     pub risk_assessments: Vec<AIOpsRiskAssessment>,
+    // IoT Sensor data
+    #[serde(default)]
+    pub iot_sensors: HashMap<String, f64>,
 }
 
 #[derive(Default, Clone, Serialize, Deserialize)]
@@ -389,6 +394,7 @@ impl StatusState {
             swap_degraded: Arc::new(AtomicBool::new(false)),
             rca_events: Arc::new(RwLock::new(Vec::new())),
             risk_assessments: Arc::new(RwLock::new(Vec::new())),
+            iot_sensors: Arc::new(RwLock::new(HashMap::new())),
         }
     }
 
@@ -472,6 +478,7 @@ impl StatusState {
             degradation_score: self.calculate_degradation_score(),
             rca_events: self.rca_events.read().map(|g| g.clone()).unwrap_or_default(),
             risk_assessments: self.risk_assessments.read().map(|g| g.clone()).unwrap_or_default(),
+            iot_sensors: self.iot_sensors.read().map(|g| g.clone()).unwrap_or_default(),
         }
     }
 
@@ -645,6 +652,13 @@ impl StatusState {
     pub fn update_risk_assessments(&self, assessments: Vec<AIOpsRiskAssessment>) {
         if let Ok(mut guard) = self.risk_assessments.write() {
             *guard = assessments;
+        }
+    }
+
+    // IoT: Update Sensor Reading
+    pub fn update_iot_sensor(&self, sensor_id: &str, value: f64) {
+        if let Ok(mut guard) = self.iot_sensors.write() {
+            guard.insert(sensor_id.to_string(), value);
         }
     }
 }

@@ -7,19 +7,20 @@ use crate::metrics::MetricsRegistry;
 use crate::skills::wasm_runtime::{WasmRuntime, WasmInstance};
 
 pub struct WasmCollector {
-    name: String,
+    name: &'static str,
     instance: Arc<Mutex<WasmInstance>>,
 }
 
 impl WasmCollector {
     pub fn new(name: String, wasm_bytes: &[u8], metrics: Arc<MetricsRegistry>, config_json: &str) -> anyhow::Result<Self> {
+        let name_static = Box::leak(name.into_boxed_str()) as &'static str;
         let runtime = WasmRuntime::new(wasm_bytes)?;
-        let mut instance = runtime.instantiate(metrics, name.clone())?;
+        let mut instance = runtime.instantiate(metrics, name_static.to_string())?;
         
         instance.call_init(config_json)?;
         
         Ok(Self {
-            name,
+            name: name_static,
             instance: Arc::new(Mutex::new(instance)),
         })
     }
@@ -28,9 +29,7 @@ impl WasmCollector {
 #[async_trait]
 impl Collector for WasmCollector {
     fn name(&self) -> &'static str {
-        // For dynamic names, we leak once or keep a static map.
-        // Since collectors are typically long-lived, this is acceptable for now.
-        Box::leak(self.name.clone().into_boxed_str())
+        self.name
     }
 
     async fn collect(&mut self, _metrics: &MetricsRegistry) -> anyhow::Result<()> {

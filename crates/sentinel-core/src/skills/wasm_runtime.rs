@@ -1,7 +1,6 @@
 // ESNODE | Source Available BUSL-1.1 | Copyright (c) 2024 Estimatedstocks AB
 use wasmtime::*;
 use std::sync::Arc;
-use parking_lot::Mutex;
 use anyhow::{Context, Result};
 use crate::metrics::MetricsRegistry;
 
@@ -81,12 +80,29 @@ impl WasmInstance {
         Ok(())
     }
 
-    pub fn call_init(&mut self, _config_json: &str) -> Result<()> {
-        if let Ok(init) = self.instance.get_typed_func::<(i32, i32), ()>(&mut self.store, "init") {
-             // Placeholder for config passing
-             tracing::debug!("WASM init called (config passing placeholder)");
-             let _ = init;
+    pub fn call_init(&mut self, config_json: &str) -> Result<()> {
+        let init = match self.instance.get_typed_func::<(i32, i32), ()>(&mut self.store, "init") {
+            Ok(f) => f,
+            Err(_) => return Ok(()), // init is optional
+        };
+
+        // Try to allocate memory in guest
+        if let Ok(allocate) = self.instance.get_typed_func::<i32, i32>(&mut self.store, "allocate") {
+            let len = config_json.len() as i32;
+            let ptr = allocate.call(&mut self.store, len)?;
+            
+            let memory = self.instance.get_memory(&mut self.store, "memory")
+                .context("Failed to get WASM memory")?;
+            
+            memory.write(&mut self.store, ptr as usize, config_json.as_bytes())
+                .context("Failed to write config to WASM memory")?;
+            
+            init.call(&mut self.store, (ptr, len))?;
+        } else {
+            tracing::warn!("WASM skill has init() but no allocate() - skipping config passing");
+            init.call(&mut self.store, (0, 0))?;
         }
+        
         Ok(())
     }
 }

@@ -141,6 +141,9 @@ fn collect_rapl(collector: &mut PowerCollector, metrics: &MetricsRegistry) {
                         .with_label_values(&[zone.name.as_str()])
                         .set(watts);
                 }
+                if let Some(agg) = &collector.aggregator {
+                    agg.report_it_power(&format!("cpu-{}", zone.name), watts);
+                }
                 let delta_joules = watts * dt.as_secs_f64();
                 metrics
                     .cpu_package_energy_joules_total
@@ -224,6 +227,9 @@ fn collect_node_power(collector: &mut PowerCollector, metrics: &MetricsRegistry)
     if let Some(ipmi_watts) = read_ipmi_node_power() {
         metrics.node_power_watts.set(ipmi_watts);
         collector.status.set_node_power(ipmi_watts);
+        if let Some(agg) = &collector.aggregator {
+            agg.report_facility_power("node-ipmi", ipmi_watts);
+        }
         let now = Instant::now();
         if let (Some(prev_watts), Some(prev_ts)) =
             (collector.last_node_power_watts, collector.last_node_ts)
@@ -251,6 +257,9 @@ fn collect_node_power(collector: &mut PowerCollector, metrics: &MetricsRegistry)
                 let watts = microwatts as f64 / 1_000_000.0;
                 metrics.node_power_watts.set(watts);
                 collector.status.set_node_power(watts);
+                if let Some(agg) = &collector.aggregator {
+                    agg.report_facility_power("node-hwmon", watts);
+                }
                 let now = Instant::now();
                 if let (Some(prev_watts), Some(prev_ts)) =
                     (collector.last_node_power_watts, collector.last_node_ts)

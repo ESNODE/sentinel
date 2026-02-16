@@ -254,8 +254,6 @@ impl Driver for Dnp3Driver {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tokio::net::TcpListener;
-    use tokio::io::AsyncReadExt;
     
     #[tokio::test]
     async fn test_dnp3_codec() {

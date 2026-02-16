@@ -147,29 +147,13 @@ impl MqttDriver {
     }
 
     /// Parse JSON payload and extract value using JSON path
-    fn extract_value(&self, payload: &str, value_path: &str) -> Option<f64> {
-        let json: serde_json::Value = serde_json::from_str(payload).ok()?;
-        
-        // Simple JSON path traversal (supports "key" or "key.subkey")
-        let parts: Vec<&str> = value_path.split('.').collect();
-        let mut current = &json;
-        
-        for part in parts {
-            current = current.get(part)?;
-        }
-        
-        // Try to extract as number
-        match current {
-            serde_json::Value::Number(n) => n.as_f64(),
-            serde_json::Value::String(s) => s.parse::<f64>().ok(),
-            _ => None,
-        }
+    pub fn extract_value(&self, payload: &str, value_path: &str) -> Option<f64> {
+        Self::extract_value_static(payload, value_path)
     }
 
     /// Match topic to mapping
-    fn find_mapping(&self, topic: &str) -> Option<&TopicMapping> {
+    pub fn find_mapping(&self, topic: &str) -> Option<&TopicMapping> {
         self.config.topic_mappings.iter().find(|mapping| {
-            // Simple wildcard matching (MQTT style)
             Self::topic_matches(&mapping.topic, topic)
         })
     }
@@ -214,7 +198,7 @@ impl MqttDriver {
                         tracing::debug!("MQTT message received: topic={}, payload={}", topic, payload);
 
                         // Find matching topic mapping
-                        if let Some(mapping) = Self::find_mapping_static(&config, &topic) {
+                        if let Some(mapping) = config.topic_mappings.iter().find(|m| Self::topic_matches(&m.topic, &topic)) {
                             if let Some(value) = Self::extract_value_static(&payload, &mapping.value_path) {
                                 let scaled_value = value * mapping.scale;
                                 
@@ -254,12 +238,6 @@ impl MqttDriver {
     }
 
     // Static helpers for use in async block
-    fn find_mapping_static(config: &MqttConfig, topic: &str) -> Option<TopicMapping> {
-        config.topic_mappings.iter().find(|mapping| {
-            Self::topic_matches(&mapping.topic, topic)
-        }).cloned()
-    }
-
     fn extract_value_static(payload: &str, value_path: &str) -> Option<f64> {
         let json: serde_json::Value = serde_json::from_str(payload).ok()?;
         

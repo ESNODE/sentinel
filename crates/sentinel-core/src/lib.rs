@@ -395,8 +395,12 @@ impl Agent {
                 
                 // Convert RCA events to AIOps format and store in StatusState
                 let aiops_rca: Vec<state::AIOpsRcaEvent> = rca_events.iter().map(|event| {
+                    let gpu_id = snapshot_full.gpus.get(event.gpu_index)
+                        .and_then(|g| g.uuid.clone().or_else(|| Some(g.gpu.clone())))
+                        .unwrap_or_else(|| "unknown".to_string());
+                    
                     state::AIOpsRcaEvent {
-                        gpu_id: "N/A".to_string(), // RcaEvent doesn't track specific GPU
+                        gpu_id,
                         timestamp_ms: now_ms,
                         root_cause: format!("{:?}", event.cause),
                         confidence: event.confidence,

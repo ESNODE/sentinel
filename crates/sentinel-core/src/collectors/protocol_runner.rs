@@ -62,6 +62,9 @@ impl Collector for ProtocolRunner {
                                 param
                             ])
                             .set(reading.value);
+                        
+                        // Also update StatusState for TUI/API
+                        self.status.update_iot_sensor(driver.id(), reading.value);
                     }
                 }
                 Err(e) => {

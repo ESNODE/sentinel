@@ -17,6 +17,7 @@ pub enum RootCause {
 #[derive(Debug, Clone)]
 pub struct RcaEvent {
     pub timestamp: Instant,
+    pub gpu_index: usize,
     pub cause: RootCause,
     pub description: String,
     pub confidence: f64, // 0.0 to 1.0
@@ -89,6 +90,7 @@ impl RcaEngine {
                     if self.check_network_cause() {
                         events.push(RcaEvent {
                             timestamp: Instant::now(),
+                            gpu_index: idx,
                             cause: RootCause::NetworkLatency,
                             description: format!("GPU-{} utilization dropped from {:.1}% to {:.1}% coincident with network degradation", 
                                 idx, prev_util, curr_util),
@@ -101,6 +103,7 @@ impl RcaEngine {
                     if gpu.thermal_throttle {
                          events.push(RcaEvent {
                             timestamp: Instant::now(),
+                            gpu_index: idx,
                             cause: RootCause::ThermalThrottling,
                             description: format!("GPU-{} utilization dropped due to thermal throttling", idx),
                             confidence: 1.0,
@@ -111,6 +114,7 @@ impl RcaEngine {
                     if latest.k8s_events_detected {
                         events.push(RcaEvent {
                             timestamp: Instant::now(),
+                            gpu_index: idx,
                             cause: RootCause::KubernetesEvents,
                             description: format!("GPU-{} utilization drop correlates with Kubernetes pod events (evictions/rescheduling)", idx),
                             confidence: 0.9,
@@ -122,6 +126,7 @@ impl RcaEngine {
                     if gpu.power_throttle {
                          events.push(RcaEvent {
                             timestamp: Instant::now(),
+                            gpu_index: idx,
                             cause: RootCause::PowerThrottling,
                             description: format!("GPU-{} utilization drop coincident with power cap violation", idx),
                             confidence: 0.9,
@@ -134,6 +139,7 @@ impl RcaEngine {
                         if curr_gen < prev_gen {
                              events.push(RcaEvent {
                                 timestamp: Instant::now(),
+                                gpu_index: idx,
                                 cause: RootCause::PcieDegradation,
                                 description: format!("GPU-{} PCIe link degraded from Gen{} to Gen{}", idx, prev_gen, curr_gen),
                                 confidence: 1.0,

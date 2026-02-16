@@ -11,6 +11,7 @@ fn overrides_apply_all_booleans_and_scalars() {
         enable_memory: Some(false),
         enable_disk: Some(false),
         enable_network: Some(false),
+        enable_ebpf: Some(true),
         enable_gpu: Some(false),
         enable_gpu_amd: Some(true),
         enable_power: Some(false),
@@ -22,21 +23,14 @@ fn overrides_apply_all_booleans_and_scalars() {
         enable_mcp: Some(true),
         enable_app: Some(true),
         enable_rack_thermals: Some(true),
-        orchestrator: None,
-        app_metrics_url: None,
         listen_address: Some("1.2.3.4:9999".to_string()),
         scrape_interval: Some(Duration::from_secs(10)),
         enable_local_tsdb: Some(false),
         local_tsdb_path: Some("/tmp/tsdb".to_string()),
         local_tsdb_retention_hours: Some(12),
         local_tsdb_max_disk_mb: Some(321),
-
         node_power_envelope_watts: Some(456.0),
-        log_level: None,
-        efficiency_profile_path: None,
-        enforcement_mode: None,
-        enforcement_interval: None,
-        dampening_interval: None,
+        ..Default::default()
     };
 
     base.apply_overrides(overrides);
@@ -45,6 +39,7 @@ fn overrides_apply_all_booleans_and_scalars() {
     assert!(!base.enable_memory);
     assert!(!base.enable_disk);
     assert!(!base.enable_network);
+    assert!(base.enable_ebpf);
     assert!(!base.enable_gpu);
     assert!(base.enable_gpu_amd);
     assert!(!base.enable_power);
