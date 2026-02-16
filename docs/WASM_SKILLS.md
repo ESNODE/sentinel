@@ -1,8 +1,8 @@
-# 🧩 Building WASM Skills for Sentinel
+# Building WASM Skills for Sentinel
 
 Sentinel is a **Polyglot** platform. It allows you to extend the observability of your AI infrastructure by writing "Skills" in almost any programming language, compiling them to WebAssembly (WASM), and injecting them into the Sentinel runtime.
 
-## 🚀 The WASM Advantage
+## The WASM Advantage
 - **Zero-Trust Isolation**: Skills run in a secure sandbox. They cannot access your host OS or filesystem without explicit permission.
 - **Language Independence**: Use the tools you already know: **Python, JavaScript, Rust, C#, Java, Go, C++, Zig**.
 - **Dynamic Injection**: Add or update skills without restarting the Sentinel agent.
@@ -26,7 +26,7 @@ Skills can report data back to Sentinel using these host-defined functions:
 
 ---
 
-## 🐍 Python Example (via Javy)
+## Python Example (via Javy)
 
 1. Write your logic in `skill.py`:
    ```python
@@ -41,7 +41,7 @@ Skills can report data back to Sentinel using these host-defined functions:
    javy compile skill.py -o skill.wasm
    ```
 
-## 🟨 JavaScript/TypeScript Example
+## JavaScript/TypeScript Example
 
 1. Create `index.js`:
    ```javascript
@@ -55,7 +55,7 @@ Skills can report data back to Sentinel using these host-defined functions:
    javy compile index.js -o skill.wasm
    ```
 
-## 🦀 Rust Example
+## Rust Example
 
 1. Use the `no_mangle` attribute:
    ```rust
@@ -75,7 +75,7 @@ Skills can report data back to Sentinel using these host-defined functions:
    cargo build --target wasm32-unknown-unknown --release
    ```
 
-## 🐹 Go Example (via TinyGo)
+## Go Example (via TinyGo)
 
 1. Create `main.go`:
    ```go
@@ -114,7 +114,7 @@ Skills can report data back to Sentinel using these host-defined functions:
    ```
 3. Sentinel will automatically load the skill and start the collection loop.
 
-## 🌈 Enterprise Languages (C#, Java, Kotlin)
+## Enterprise Languages (C#, Java, Kotlin)
 For C#, Java, or Kotlin, use the following WASM toolchains to generate WASI-compliant binaries:
 - **C#**: [NativeAOT-LLVM](https://github.com/dotnet/runtimelab/tree/feature/NativeAOT-LLVM) or [Wasmbuild](https://github.com/v8/v8/wiki/WebAssembly-and-C-Sharp).
 - **Java/Kotlin**: [TeaVM](https://teavm.org/) or [GraalVM WASM](https://www.graalvm.org/latest/reference-manual/wasm/).

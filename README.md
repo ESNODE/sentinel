@@ -1,4 +1,4 @@
-# 🦅 Sentinel
+# Sentinel
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/sentinel-logo.png" alt="Sentinel Logo" width="600"/>
@@ -7,19 +7,19 @@
   
   **Stop observing. Start Sensing.** Sentinel is the first high-performance, **WASM-extensible** observability framework purpose-built for the scale, thermal complexity, and power-density of modern GPU clusters.
 
-  [**Explore the Docs**](docs/) • [**Build a Skill**](skills/README.md)
+  [**Explore the Docs**](./docs/) | [**Build a Skill**](./skills/README.md)
 
   [![License](https://img.shields.io/badge/License-BUSL--1.1-blue.svg)](LICENSE)
   [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ESNODE/sentinel)
   [![WASM Powered](https://img.shields.io/badge/Powered_by-WASM-purple.svg)](https://webassembly.org/)
   [![NVIDIA DGX Ready](https://img.shields.io/badge/NVIDIA-DGX_Ready-success)](https://www.nvidia.com/en-us/data-center/dgx-systems/)
   [![Go Support](https://img.shields.io/badge/Go-Ready-blue.svg)](https://go.dev/)
-  [![Hype](https://img.shields.io/badge/Hype-Extreme-orange.svg)](#)
+  [![Hype](https://img.shields.io/badge/Hype-Extreme-orange.svg)](https://github.com/ESNODE/sentinel)
 </div>
 
 ---
 
-## ⚡ Visual Showcase
+## Visual Showcase
 
 <div align="center">
   <h3>The "Aha!" Moment: Advanced RCA in the TUI</h3>
@@ -35,20 +35,20 @@
 
 ---
 
-## ✱ Watch over your AI Fleet
+## Watch over your AI Fleet
 
 ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-built for the scale and thermal complexity of modern AI infrastructure. It transforms raw hardware telemetry into **Actionable Sentience**.
 
-### 🦉 Why Sentinel?
+### Why Sentinel?
 
-*   **⚡ Polyglot Skills System:** Modular architecture. Build "Skills" in **Python, JavaScript, TypeScript, Rust, Go, C++, C#, Java, or Kotlin**. Drop them in as WASM binaries without recompiling the core.
-*   **🧠 AIOps Intelligence:** Autonomous Root Cause Analysis (RCA) and Predictive Maintenance built directly into the agent.
-*   **🔋 Power-Aware Orchestration:** Real-time PUE calculation and performance-per-watt scoring for green AI.
-*   **🖥️ Modern TUI:** A premium, dark-mode terminal interface for instant infrastructure command and control.
+*   **Polyglot Skills System:** Modular architecture. Build "Skills" in **Python, JavaScript, TypeScript, Rust, Go, C++, C#, Java, or Kotlin**. Drop them in as WASM binaries without recompiling the core.
+*   **AIOps Intelligence:** Autonomous Root Cause Analysis (RCA) and Predictive Maintenance built directly into the agent.
+*   **Power-Aware Orchestration:** Real-time PUE calculation and performance-per-watt scoring for green AI.
+*   **Modern TUI:** A premium, dark-mode terminal interface for instant infrastructure command and control.
 
 ---
 
-## 🧩 The WASM Skills Gallery
+## The WASM Skills Gallery
 Traditional agents are rigid. Sentinel is a living organism. Extensions are **Polyglot**—write in your language of choice and compile to **WebAssembly**.
 
 | Skill | Category | Capability | Viral Factor |
