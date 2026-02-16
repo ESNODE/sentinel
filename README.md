@@ -7,7 +7,7 @@
   
   **Stop observing. Start Sensing.** Sentinel is the first high-performance, **WASM-extensible** observability framework purpose-built for the scale, thermal complexity, and power-density of modern GPU clusters.
 
-  [**Explore the Docs**](docs/) • [**Join the Discord**](https://discord.gg/sentinel) • [**Build a Skill**](skills/README.md)
+  [**Explore the Docs**](docs/) • [**Build a Skill**](skills/README.md)
 
   [![License](https://img.shields.io/badge/License-BUSL--1.1-blue.svg)](LICENSE)
   [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ESNODE/sentinel)

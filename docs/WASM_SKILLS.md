@@ -98,5 +98,5 @@ For C#, Java, or Kotlin, use the following WASM toolchains to generate WASI-comp
 ---
 
 <div align="center">
-  <p>Need help? Join the <a href="https://discord.gg/sentinel">Sentinel Discord</a> or check out the <a href="../skills/wasm_sample">Sample Rust Skill</a>.</p>
+  <p>Need help? Check out the <a href="../skills/wasm_sample">Sample Rust Skill</a> or open an Issue.</p>
 </div>
