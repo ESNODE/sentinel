@@ -27,9 +27,9 @@
 
   <br/>
 
-  <h3>The "WASM Magic": Instant Extensibility</h3>
+  <h3>The "WASM Magic": Polyglot Extensibility</h3>
   <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/wasm-magic.png" alt="Sentinel WASM Magic" width="800"/>
-  <p><i>Write a Skill in Rust, compile to WASM, and see your new hardware metrics appear instantly without a restart.</i></p>
+  <p><i>Build a Skill in Python (via Javy), JavaScript, or Rust. Compile to WASM and see it live instantly.</i></p>
 </div>
 
 ---
@@ -40,7 +40,7 @@ ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-bui
 
 ### 🦉 Why Sentinel?
 
-*   **⚡ WASM Skills System:** Modular architecture. Drop in new "Skills" (MQTT, SNMP, DNP3, custom hardware) without recompiling the core.
+*   **⚡ Polyglot Skills System:** Modular architecture. Build "Skills" in **Python, JavaScript, Rust, Go, or Zig**. Drop them in as WASM binaries without recompiling the core.
 *   **🧠 AIOps Intelligence:** Autonomous Root Cause Analysis (RCA) and Predictive Maintenance built directly into the agent.
 *   **🔋 Power-Aware Orchestration:** Real-time PUE calculation and performance-per-watt scoring for green AI.
 *   **🖥️ Modern TUI:** A premium, dark-mode terminal interface for instant infrastructure command and control.
@@ -48,7 +48,7 @@ ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-bui
 ---
 
 ## 🧩 The WASM Skills Gallery
-Traditional agents are rigid. Sentinel is a living organism. Extensions are written in any language (Rust, Go, C++, Zig) and compiled to **WebAssembly**.
+Traditional agents are rigid. Sentinel is a living organism. Extensions are **Polyglot**—write in your language of choice and compile to **WebAssembly**.
 
 | Skill | Category | Capability | Viral Factor |
 | :--- | :--- | :--- | :--- |

@@ -4,8 +4,14 @@ Sentinel is built on a **Modular Skill Architecture**. While the core handles th
 
 ## 🚀 Why Skills?
 *   **Isolation**: Skills run in a WASM sandbox. If a skill crashes, Sentinel keeps watching.
-*   **Language Agnostic**: Write skills in Rust, Go, Zig, or C++.
+*   **Modern Language Support**: Write skills in **Python, JavaScript, Rust, Go, or Zig**.
+*   **Isolation**: Skills run in a WASM sandbox. If a skill crashes, Sentinel keeps watching.
 *   **Hot Reloading**: Drop a `.wasm` file in, and it's live. No restarts. No downtime.
+
+## 🐍 Python & 🟨 JavaScript Support
+Sentinel leverages the WASM ecosystem to support high-level languages:
+*   **Python**: Compile to WASM using `WASI-SDK` or [Javy](https://github.com/bytecodealliance/javy) for embedded scripts.
+*   **JavaScript**: Use `Javy` or `QuickJS` to bundle your scripts into a 1MB WASI-compatible binary.
 
 ## 📦 Core Skills
 These are built-in or officially supported:
