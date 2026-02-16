@@ -1,6 +1,6 @@
 # 🚀 Sentinel Viral Launch Recipe
 
-To create **extreme traction** (OpenClaw-style), we must shift from "Software Tool" to **"Infrastructure Revolution"**. This recipe focuses on speed, aesthetics, and the "Holy Cow" factor.
+To create **extreme traction**, we must shift from "Software Tool" to **"Infrastructure Revolution"**. This recipe focuses on speed, aesthetics, and the "Holy Cow" factor.
 
 ## 1. The "Aha!" Moment (Visuals First)
 *   **The Hero GIF**: Create a high-quality 15-second screen recording of the TUI. Show a GPU's utilization dropping, the RCA Engine detecting "Thermal Throttling", and then a "Skill" automatically adjusting a fan curve via MQTT. 
@@ -25,7 +25,7 @@ Reach out to the high-authority voices in the Rust and AI Infrastructure space:
 *   **Star-Strikes**: Don't promote slowly. Pick a specific **"Launch Day"**. Coordinate all your social posts, LinkedIn, and Discord announcements to hit within the same 4-hour window.
 *   **The "Good First Skills" Issues**: Create 10 issues labeled `good-first-skill` instead of `good-first-issue`. It sounds more exciting and specific to the Sentinel mission.
 
-## 6. The "OpenClaw" Aesthetic
+## 6. The "Cyber-Sentinal" Aesthetic
 *   **Interactive Docs**: Use a tool like Mintlify or Docusaurus with a "Sentinel" dark theme that looks exactly like the TUI.
 *   **Landing Page**: A single-pager with a terminal window emulator that shows the `esnode-sentinel cli` output in real-time (recorded or mocked).
 
