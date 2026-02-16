@@ -18,6 +18,22 @@
 
 ---
 
+## ⚡ Visual Showcase
+
+<div align="center">
+  <h3>The "Aha!" Moment: Advanced RCA in the TUI</h3>
+  <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/sentinel-hero.png" alt="Sentinel Hero Visual" width="800"/>
+  <p><i>Watch Sentinel detect thermal throttling and automatically mitigate it via the Fan Control Skill in real-time.</i></p>
+
+  <br/>
+
+  <h3>The "WASM Magic": Instant Extensibility</h3>
+  <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/wasm-magic.png" alt="Sentinel WASM Magic" width="800"/>
+  <p><i>Write a Skill in Rust, compile to WASM, and see your new hardware metrics appear instantly without a restart.</i></p>
+</div>
+
+---
+
 ## ✱ Watch over your AI Fleet
 
 ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-built for the scale and thermal complexity of modern AI infrastructure. It transforms raw hardware telemetry into **Actionable Sentience**.
