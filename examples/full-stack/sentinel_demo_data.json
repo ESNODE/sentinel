@@ -1,0 +1,24 @@
+{
+  "gpus": [
+    {
+      "id": "GPU 0 (H100 PCIe)",
+      "util": 94.2,
+      "temp": 42.1,
+      "power": 312.5,
+      "mem_used": 76100,
+      "mem_total": 81920,
+      "risk_score": 12.0
+    },
+    {
+      "id": "GPU 1 (H100 PCIe)",
+      "util": 88.5,
+      "temp": 45.3,
+      "power": 295.1,
+      "mem_used": 78200,
+      "mem_total": 81920,
+      "risk_score": 5.4
+    }
+  ],
+  "pue": 1.07,
+  "cluster_name": "sentinel-demo-cluster"
+}
