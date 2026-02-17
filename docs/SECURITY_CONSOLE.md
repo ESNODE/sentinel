@@ -22,19 +22,13 @@ cert_path = "/path/to/fullchain.pem"
 key_path = "/path/to/privkey.pem"
 ```
 
-### Authentication (JWT)
-Sentinel utilizes JSON Web Tokens (JWT) for session management. When `enable_auth` is true, all management and status APIs require a valid Bearer token.
+### Authentication (JWT & SSO)
+Sentinel utilizes JSON Web Tokens (JWT) for session management and integrates with modern identity providers (Okta, Azure AD, Google) via OIDC and SAML.
 
 ```toml
 [security]
 enable_auth = true
-```
 
-### SSO (Single Sign-On)
-Sentinel integrates with modern identity providers via OIDC and SAML.
-
-#### OIDC Configuration
-```toml
 [security.sso_provider]
 type = "Oidc"
 issuer_url = "https://accounts.google.com"
@@ -42,22 +36,35 @@ client_id = "..."
 client_secret = "..."
 ```
 
-#### SAML Configuration
+## 🌐 Global Fleet Management (H100/A100 Clusters)
+
+Sentinel scales from a single server to massive, multi-datacenter GPU fleets via the **Mission Control Plane (MCP)**.
+
+### Single Pane of Glass
+Designate a Sentinel node as an **MCP Master**. It aggregates telemetry from all leaf nodes across your datacenters, providing a unified view of:
+- **Global PUE & Efficiency**: Real-time cross-cluster power scoring.
+- **Unified Topology**: Heatmaps and hardware health for thousands of nodes.
+- **Bulk Skill Deployment**: Push autonomic automations (skills) to the entire fleet in a single click.
+
 ```toml
-[security.sso_provider]
-type = "Saml"
-metadata_url = "https://identity-provider.com/saml/metadata"
+# Master Node Configuration
+enable_mcp = true
+
+[[orchestrator.clusters]]
+name = "US-East-DC-01"
+endpoints = ["10.0.1.10:9100", "10.0.1.11:9100"]
 ```
 
-## 🛠️ Configuration Reference
+## 🛡️ Robust Security & Skill Isolation
 
-| Key | Type | Description |
-| :--- | :--- | :--- |
-| `security.enable_https` | bool | Enables HTTPS listener. |
-| `security.cert_path` | string | Path to SSL/TLS certificate. |
-| `security.key_path` | string | Path to SSL/TLS private key. |
-| `security.enable_auth` | bool | Enables JWT-based authentication for APIs. |
-| `security.sso_provider` | object | SSO provider configuration (OIDC/SAML). |
+### 1. Capability-Based WASM Sandboxing
+Sentinel WASM Skills (written in **Python, Go, Rust, JS**, etc.) operate under a **Zero-Trust** model.
+- **Isolation**: Every skill runs in its own memory cage.
+- **Permissions**: Skills must explicitly request capabilities (e.g., `Allow NVML Read`).
+- **Signature Verification**: Only cryptographically signed skills from your enterprise CA can be deployed to production nodes.
+
+### 2. Physical-to-Digital Trust
+Sentinel uses hardware-backed identity (**TPM/Secure Enclave**) to verify that telemetry is physically sourced from authorized GPU hardware, preventing data spoofing in high-security environments.
 
 ---
 *ESNODE | Source Available BUSL-1.1 | Copyright (c) 2024 Estimatedstocks AB*
