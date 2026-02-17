@@ -1,0 +1,15 @@
+listen_address = "0.0.0.0:9100"
+tags = { "role" = "master", "datacenter" = "local-lab" }
+enable_mcp = true
+
+[security]
+enable_auth = true
+
+[orchestrator]
+enabled = true
+token = "esnode-master-secret"
+allow_public = true
+
+[[orchestrator.clusters]]
+name = "compute-cluster-01"
+endpoints = ["localhost:9101"]

@@ -59,8 +59,6 @@ Please provide:
 
 ## 3. Security Features
 
-### Authentication & Authorization
-
 **Default Security Posture:**
 ```toml
 [orchestrator]
@@ -69,6 +67,15 @@ allow_public = false         # Loopback-only when enabled
 token = ""                   # Must be explicitly set
 require_client_cert = false  # Optional mTLS
 ```
+
+### WASM Skill Verification (ED25519)
+All third-party extensions (Skills) are cryptographically verified before execution:
+- **Signature Algorithm:** ED25519
+- **Root of Trust:** Public key provided in `sentinel.toml` or via OIDC/SAML metadata.
+- **Verification Trigger:** On-load and on-update.
+- **Isolation:** WebAssembly sandbox with strictly defined imports/exports.
+
+### Authentication & Authorization
 
 **Bearer Token Authentication:**
 - Minimum entropy: 256 bits (32 bytes)

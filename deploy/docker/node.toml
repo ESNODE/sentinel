@@ -1,0 +1,5 @@
+listen_address = "0.0.0.0:9101"
+tags = { "role" = "worker", "node_id" = "node-01" }
+
+[security]
+enable_auth = true

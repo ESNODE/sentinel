@@ -15,7 +15,8 @@ Welcome! This project is source-available under the ESNODE BUSL-1.1 license with
 4) Tests: add/extend tests for new behavior; run `cargo test --workspace --locked` before sending a PR.  
 5) Style: follow existing Rust formatting (`cargo fmt`) and lint behavior (`cargo clippy` if enabled). Prefer UUID-first labels for GPU/MIG metrics per current design.  
 6) Security: do not commit secrets; report vulnerabilities privately to security@estimatedstocks.com.  
-7) Licensing: files must retain the BUSL notice and copyright header where present.
+7) WASM Skills: Contributions to the `skills/` directory should include a WASM binary (for testing), a signature manifest (optional), and follow the capability-based security model.
+8) Licensing: files must retain the BUSL notice and copyright header where present.
 
 ## Code of Conduct
 - Be respectful, constructive, and inclusive in issues and reviews.

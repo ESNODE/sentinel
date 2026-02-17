@@ -1,0 +1,12 @@
+target/
+.git/
+.github/
+.idea/
+.vscode/
+**/*.log
+dist/
+external_sources/
+*.tar.gz
+temp_verify/
+pitch_doc/
+esnode_logo.jpg

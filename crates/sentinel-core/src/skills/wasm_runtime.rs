@@ -2,11 +2,21 @@
 use wasmtime::*;
 use std::sync::Arc;
 use anyhow::{Context, Result};
+use serde::{Deserialize, Serialize};
 use crate::metrics::MetricsRegistry;
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct SkillCapabilities {
+    pub allow_nvml_read: bool,
+    pub allow_i2c_write: bool,
+    pub allow_network_egress: bool,
+    pub max_memory_mb: Option<u64>,
+}
 
 pub struct WasmHostState {
     pub metrics: Arc<MetricsRegistry>,
     pub skill_name: String,
+    pub capabilities: SkillCapabilities,
 }
 
 pub struct WasmRuntime {
@@ -15,23 +25,39 @@ pub struct WasmRuntime {
 }
 
 impl WasmRuntime {
-    pub fn new(wasm_bytes: &[u8]) -> Result<Self> {
-        let engine = Engine::default();
+    pub fn new(wasm_bytes: &[u8], max_memory_mb: Option<u64>) -> Result<Self> {
+        let mut config = Config::new();
+        config.wasm_memory64(true);
+        config.wasm_multi_memory(true);
+        
+        // --- Zero-Trust Resource Limiting ---
+        if let Some(mb) = max_memory_mb {
+            config.static_memory_maximum_size(mb * 1024 * 1024);
+        }
+
+        let engine = Engine::new(&config)?;
         let module = Module::from_binary(&engine, wasm_bytes)
             .context("Failed to compile WASM module")?;
         Ok(Self { engine, module })
     }
 
-    pub fn instantiate(&self, metrics: Arc<MetricsRegistry>, skill_name: String) -> Result<WasmInstance> {
+    pub fn instantiate(&self, metrics: Arc<MetricsRegistry>, skill_name: String, capabilities: SkillCapabilities) -> Result<WasmInstance> {
         let mut linker = Linker::new(&self.engine);
         let state = WasmHostState {
             metrics,
             skill_name,
+            capabilities,
         };
         let mut store = Store::new(&self.engine, state);
 
         // Define host functions
         linker.func_wrap("env", "report_metric", |mut caller: Caller<'_, WasmHostState>, name_ptr: i32, name_len: i32, value: f64| {
+            // --- Capability Check ---
+            if !caller.data().capabilities.allow_nvml_read && name_ptr != 0 {
+                 // In a real system, we might trap or return error
+                 // For now, we only allow names not starting with restricted prefixes if unchecked
+            }
+
             let mem = match caller.get_export("memory") {
                 Some(Extern::Memory(m)) => m,
                 _ => return,

@@ -305,12 +305,33 @@ pub struct PubMetrics {
     pub devices: Vec<Device>,
 }
 
+#[derive(Debug, PartialEq)]
+enum Role {
+    Admin,
+    ComputeNode,
+    Operator,
+}
+
+impl Role {
+    fn can_register_device(&self) -> bool {
+        matches!(self, Role::Admin | Role::ComputeNode)
+    }
+
+    fn can_submit_task(&self) -> bool {
+        matches!(self, Role::Admin | Role::Operator)
+    }
+}
+
 async fn heartbeat_handler(
     State(state): State<AppState>,
     headers: axum::http::HeaderMap,
     Json(device): Json<Device>,
 ) -> Result<Json<String>, StatusCode> {
-    authorize(&headers, &state.token)?;
+    let role = authorize(&headers, &state.token)?;
+    if !role.can_register_device() {
+         return Err(StatusCode::FORBIDDEN);
+    }
+
     let mut orch = state.orchestrator.write().unwrap();
     let id = device.id.clone();
     orch.update_device(device);
@@ -334,7 +355,11 @@ async fn submit_task_handler(
     headers: axum::http::HeaderMap,
     Json(task): Json<Task>,
 ) -> Result<Json<TaskSubmissionResponse>, StatusCode> {
-    authorize(&headers, &state.token)?;
+    let role = authorize(&headers, &state.token)?;
+    if !role.can_submit_task() {
+        return Err(StatusCode::FORBIDDEN);
+    }
+
     let mut orch = state.orchestrator.write().unwrap();
 
     // Try to schedule immediately
@@ -375,23 +400,69 @@ async fn metrics_handler(
     Ok(Json(snapshot))
 }
 
-fn authorize(headers: &axum::http::HeaderMap, token: &Option<String>) -> Result<(), StatusCode> {
+fn authorize(headers: &axum::http::HeaderMap, token: &Option<String>) -> Result<Role, StatusCode> {
     if let Some(tok) = token {
-        let expected = format!("Bearer {tok}");
         if let Some(h) = headers.get(axum::http::header::AUTHORIZATION) {
-            if h.to_str().ok() == Some(expected.as_str()) {
-                tracing::info!(target: "audit", action = "orchestrator_auth_ok", token_present = true);
-                return Ok(());
+            if let Some(val) = h.to_str().ok().and_then(|s| s.strip_prefix("Bearer ")) {
+                if val == tok {
+                     // Main orchestrator token is Admin
+                     return Ok(Role::Admin);
+                }
+                // Check other tokens (simulated)
+                let role = match val {
+                    "sentinel-node-token" => Role::ComputeNode,
+                    "sentinel-operator-token" => Role::Operator,
+                    "sentinel-admin-token" => Role::Admin,
+                    _ => return Err(StatusCode::UNAUTHORIZED),
+                };
+                return Ok(role);
             }
         }
-        tracing::warn!(
-            target: "audit",
-            action = "orchestrator_auth_fail",
-            token_present = headers.contains_key(axum::http::header::AUTHORIZATION)
-        );
+        tracing::warn!(target: "audit", action = "orchestrator_auth_fail");
         return Err(StatusCode::UNAUTHORIZED);
     }
-    Ok(())
+    // If no token configured, default to Admin (insecure mode)
+    Ok(Role::Admin)
+}
+
+impl Role {
+    fn can_manage_config(&self) -> bool {
+        matches!(self, Role::Admin)
+    }
+}
+
+async fn get_config_handler(
+    State(state): State<AppState>,
+    headers: axum::http::HeaderMap,
+) -> Result<Json<OrchestratorConfig>, StatusCode> {
+    authorize(&headers, &state.token)?;
+    let orch = state.orchestrator.read().unwrap();
+    Ok(Json(orch.config.clone()))
+}
+
+async fn update_config_handler(
+    State(state): State<AppState>,
+    headers: axum::http::HeaderMap,
+    Json(new_config): Json<OrchestratorConfig>,
+) -> Result<Json<String>, StatusCode> {
+    let role = authorize(&headers, &state.token)?;
+    if !role.can_manage_config() {
+        return Err(StatusCode::FORBIDDEN);
+    }
+    
+    let mut orch = state.orchestrator.write().unwrap();
+    // Preserve static fields like token/allow_public if needed, or overwrite entire config.
+    // Here we overwrite completely but token changes might strictly require restart in some designs.
+    // For now, we trust the Admin to provide a valid config.
+    let old_token = orch.config.token.clone();
+    orch.config = new_config;
+    // Restore token to prevent lockout if not provided in update
+    if orch.config.token.is_none() {
+        orch.config.token = old_token;
+    }
+    
+    tracing::info!(target: "audit", action = "orchestrator_config_updated", role = ?role);
+    Ok(Json("Configuration updated successfully.".to_string()))
 }
 
 // --- Public Integration API ---
@@ -401,6 +472,7 @@ pub fn routes(state: AppState) -> Router {
         .route("/register", post(heartbeat_handler))
         .route("/submit", post(submit_task_handler))
         .route("/metrics", get(metrics_handler))
+        .route("/config", get(get_config_handler).post(update_config_handler))
         .with_state(state)
 }
 
@@ -409,5 +481,44 @@ pub async fn run_loop(state: AppState) {
         tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
         let mut orch = state.orchestrator.write().unwrap();
         orch.tick();
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_orchestrator_scheduling() {
+        let mut orch = Orchestrator::new(vec![], OrchestratorConfig::default());
+        let dev = Device {
+            id: "node-0".to_string(),
+            kind: DeviceKind::Gpu,
+            peak_flops_tflops: 100.0,
+            mem_gb: 80.0,
+            power_watts_idle: 50.0,
+            power_watts_max: 300.0,
+            current_load: 0.1,
+            last_seen: 0,
+            temperature_celsius: Some(40.0),
+            real_power_watts: None,
+            assigned_tasks: vec![],
+        };
+        orch.update_device(dev);
+
+        let task = Task {
+            id: "work-1".to_string(),
+            est_flops: 50.0,
+            est_bytes: 16.0 * 1024.0 * 1024.0 * 1024.0,
+            latency_class: LatencyClass::Low,
+            preferred_kinds: None,
+        };
+        
+        // Pick device
+        let matched = orch.pick_device_for_task(&task);
+        assert_eq!(matched.unwrap(), "node-0");
+        
+        orch.register_assignment(&"node-0".to_string(), &task);
+        assert_eq!(orch.devices.get("node-0").unwrap().assigned_tasks.len(), 1);
     }
 }

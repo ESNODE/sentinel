@@ -29,7 +29,7 @@ pub struct StatusState {
 }
 
 // AIOps: Root Cause Analysis Event
-#[derive(Default, Clone, Serialize, Deserialize)]
+#[derive(Default, Clone, Serialize, Deserialize, Debug)]
 pub struct AIOpsRcaEvent {
     pub gpu_id: String,
     pub timestamp_ms: u64,
@@ -660,5 +660,54 @@ impl StatusState {
         if let Ok(mut guard) = self.iot_sensors.write() {
             guard.insert(sensor_id.to_string(), value);
         }
+    }
+
+    pub fn load_demo_data(&self) {
+        let mut gpus = self.gpu_status.write().unwrap();
+        
+        // Local GPUs
+        gpus.push(GpuStatus {
+            gpu: "NVIDIA H100 80GB HBM3 (Local)".to_string(),
+            uuid: Some("GPU-LOCAL-7741".to_string()),
+            util_percent: Some(88.5),
+            temperature_celsius: Some(45.0),
+            power_watts: Some(350.0),
+            memory_total_bytes: Some(85899345920.0),
+            memory_used_bytes: Some(42899345920.0),
+            health: Some(GpuHealth { pstate: Some(0), ..Default::default() }),
+            ..Default::default()
+        });
+
+        // Simulated Remote Cluster GPU (Visible via MCP)
+        gpus.push(GpuStatus {
+            gpu: "NVIDIA B200 (Tokyo-DC-01)".to_string(),
+            uuid: Some("GPU-REMOTE-9982".to_string()),
+            util_percent: Some(12.0),
+            temperature_celsius: Some(38.0),
+            power_watts: Some(150.0),
+            memory_total_bytes: Some(192000000000.0),
+            memory_used_bytes: Some(24000000000.0),
+            health: Some(GpuHealth { pstate: Some(0), ..Default::default() }),
+            ..Default::default()
+        });
+        
+        if let Ok(mut host) = self.host.write() {
+            host.load_avg_5m = Some(2.4);
+            host.cpu_util_percent = Some(15.2);
+            host.k8s_events_detected = Some(false);
+        }
+
+        // Add an AIOps RCA Event
+        if let Ok(mut rca) = self.rca_events.write() {
+             rca.push(AIOpsRcaEvent {
+                 gpu_id: "GPU-LOCAL-7741".to_string(),
+                 timestamp_ms: chrono::Utc::now().timestamp_millis() as u64,
+                 root_cause: "High Thermal Flux Detected".to_string(),
+                 confidence: 0.94,
+                 details: "Predictive analysis suggests cooling efficiency drop in Rack 4.".to_string(),
+             });
+        }
+        
+        self.node_power_microwatts.store(750 * 1_000_000, Ordering::Relaxed);
     }
 }

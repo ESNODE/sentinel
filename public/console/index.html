@@ -393,7 +393,8 @@
 
         <div class="nav-group">
             <div class="nav-label">Settings</div>
-            <a href="#" class="nav-item"><i data-lucide="settings"></i>Configuration</a>
+            <a href="#settings" class="nav-item" id="nav-settings"><i data-lucide="settings"></i>Orchestrator
+                Management</a>
             <a href="#" class="nav-item"><i data-lucide="users"></i>Team Access</a>
             <a href="#" class="nav-item"><i data-lucide="key"></i>API Keys</a>
         </div>
@@ -431,171 +432,560 @@
         </header>
 
         <main class="content">
-            <div class="page-header">
+            <!-- Page Headers (Dynamic) -->
+            <div id="page-header-container">
+                <div class="page-header" id="header-overview">
+                    <div class="page-title">
+                        <h1>Sensing Overview</h1>
+                        <p>Real-time autonomous observability for Global Cluster A-100</p>
+                    </div>
+                </div>
+                <div class="page-header" id="header-clusters" style="display: none;">
+                    <div class="page-title">
+                        <h1>GPU Clusters</h1>
+                        <p>Global census of AI compute resources via MCP</p>
+                    </div>
+                </div>
+                <div class="page-header" id="header-power" style="display: none;">
+                    <div class="page-title">
+                        <h1>Power & PUE</h1>
+                        <div style="display: flex; gap: 20px; align-items: center; margin-top: 10px;">
+                            <div class="card" style="padding: 10px 20px;">
+                                <div class="card-label" style="margin-bottom: 4px;">Fleet PUE</div>
+                                <div class="card-value" id="global-pue-header" style="font-size: 24px;">1.07</div>
+                            </div>
+                            <div class="card" style="padding: 10px 20px;">
+                                <div class="card-label" style="margin-bottom: 4px;">Total Load</div>
+                                <div class="card-value" id="total-power-header" style="font-size: 24px;">0 kW</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-header" id="header-topology" style="display: none;">
+                    <div class="page-title">
+                        <h1>Global Topology</h1>
+                        <p>Geospatial and rack-level hardware mapping</p>
+                    </div>
+                </div>
+            </div>
+            <div class="page-header" id="header-settings" style="display: none;">
                 <div class="page-title">
-                    <h1>Sensing Overview</h1>
-                    <p>Real-time autonomous observability for Global Cluster A-100</p>
+                    <h1>Orchestrator Management</h1>
+                    <p>Configure autonomous behavioral loops and security policies</p>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="live-indicator"></div>
-                    <span
-                        style="font-size: 12px; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Live
-                        Telemetry</span>
+                <button class="action-btn" onclick="saveSettings()">
+                    <i data-lucide="save"></i> Save Configuration
+                </button>
+            </div>
+    </div>
+
+    <!-- Overview Page -->
+    <div id="page-overview" class="page-content">
+        <div class="stats-grid">
+            <div class="card">
+                <div class="card-label">Global PUE <i data-lucide="info" size="14"></i></div>
+                <div class="card-value" id="stat-pue">1.07</div>
+                <div class="card-trend trend-up"><i data-lucide="trending-down"></i> -2.4% vs last week</div>
+            </div>
+            <div class="card">
+                <div class="card-label">GPU Utilization <i data-lucide="cpu" size="14"></i></div>
+                <div class="card-value" id="stat-util">0%</div>
+                <div class="card-trend trend-up"><i data-lucide="trending-up"></i> Live Telemetry</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Avg Thermal <i data-lucide="thermometer" size="14"></i></div>
+                <div class="card-value" id="stat-temp">--°C</div>
+                <div class="card-trend" style="color: var(--text-secondary);">Steady state</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Active Skills <i data-lucide="zap" size="14"></i></div>
+                <div class="card-value" id="stat-skills">12</div>
+                <div class="card-trend trend-up">4 auto-recovering</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card chart-card">
+                <div class="chart-header">
+                    <div style="font-size: 16px; font-weight: 600;">Power Flux Distribution</div>
+                    <div style="display: flex; gap: 12px;">
+                        <span style="font-size: 12px; color: var(--accent-cyan);">● Local DC</span>
+                        <span style="font-size: 12px; color: var(--accent-purple);">● Remote MCP</span>
+                    </div>
+                </div>
+                <div class="chart-placeholder" id="powerChart">
+                    <!-- Bars injected by JS -->
                 </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="card">
-                    <div class="card-label">Global PUE <i data-lucide="info" size="14"></i></div>
-                    <div class="card-value">1.07</div>
-                    <div class="card-trend trend-up"><i data-lucide="trending-down"></i> -2.4% vs last week</div>
+            <div class="card">
+                <div class="chart-header">
+                    <div style="font-size: 16px; font-weight: 600;">Skill Efficiency</div>
                 </div>
-                <div class="card">
-                    <div class="card-label">GPU Utilization <i data-lucide="cpu" size="14"></i></div>
-                    <div class="card-value">94.2%</div>
-                    <div class="card-trend trend-up"><i data-lucide="trending-up"></i> +1.2% active</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">Avg Thermal <i data-lucide="thermometer" size="14"></i></div>
-                    <div class="card-value">42°C</div>
-                    <div class="card-trend" style="color: var(--text-secondary);">Steady state</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">Active Skills <i data-lucide="zap" size="14"></i></div>
-                    <div class="card-value">12</div>
-                    <div class="card-trend trend-up">4 auto-recovering</div>
+                <div style="display: flex; flex-direction: column; gap: 20px;" id="skill-meters">
+                    <!-- Meters injected by JS -->
+                    <div class="skill-meter">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                            <span>Liquid-Tune PID</span>
+                            <span style="color: var(--success);">Optimal</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                            <div style="width: 88%; height: 100%; background: var(--accent-cyan);"></div>
+                        </div>
+                    </div>
+                    <div class="skill-meter">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                            <span>Security Auditor</span>
+                            <span style="color: var(--success);">100% Secure</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                            <div style="width: 100%; height: 100%; background: var(--accent-purple);"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="main-grid">
-                <div class="card chart-card">
-                    <div class="chart-header">
-                        <div style="font-size: 16px; font-weight: 600;">Power Flux Distribution</div>
-                        <div style="display: flex; gap: 12px;">
-                            <span style="font-size: 12px; color: var(--accent-cyan);">● Cluster A</span>
-                            <span style="font-size: 12px; color: var(--accent-purple);">● Cluster B</span>
-                        </div>
-                    </div>
-                    <div class="chart-placeholder" id="powerChart">
-                        <!-- Bars injected by JS -->
-                    </div>
+            <div class="card activity-card">
+                <div class="chart-header">
+                    <div style="font-size: 18px; font-weight: 600;">Autonomous Activity Log</div>
                 </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Root Cause</th>
+                            <th>Details</th>
+                            <th>Confidence</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-log-body">
+                        <!-- RCA events injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-                <div class="card">
-                    <div class="chart-header">
-                        <div style="font-size: 16px; font-weight: 600;">Skill Efficiency</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        <div class="skill-meter">
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
-                                <span>Liquid-Tune PID</span>
-                                <span style="color: var(--success);">Optimal</span>
-                            </div>
-                            <div
-                                style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
-                                <div style="width: 88%; height: 100%; background: var(--accent-cyan);"></div>
-                            </div>
-                        </div>
-                        <div class="skill-meter">
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
-                                <span>Fan-Watchdog</span>
-                                <span style="color: var(--success);">82% saved</span>
-                            </div>
-                            <div
-                                style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
-                                <div style="width: 82%; height: 100%; background: var(--accent-purple);"></div>
-                            </div>
-                        </div>
-                        <div class="skill-meter">
-                            <div
-                                style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
-                                <span>Eco-Shifter</span>
-                                <span style="color: var(--warning);">Throttling prevented</span>
-                            </div>
-                            <div
-                                style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
-                                <div style="width: 65%; height: 100%; background: var(--warning);"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card activity-card">
-                    <div class="chart-header">
-                        <div style="font-size: 18px; font-weight: 600;">Autonomous Activity Log</div>
-                        <button
-                            style="background: none; border: 1px solid var(--border); color: var(--text-primary); padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">Export
-                            CSV</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Event ID</th>
-                                <th>Timestamp</th>
-                                <th>Category</th>
-                                <th>Intelligence Action</th>
-                                <th>Impact</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="font-family: monospace; color: var(--accent-cyan);">RCA-4421</td>
-                                <td>2 min ago</td>
-                                <td>Thermal</td>
-                                <td>Detected GPU 0 Throttling; Auto-adjusted cold plate flow.</td>
-                                <td style="color: var(--success);">-3.2°C</td>
-                                <td><span class="status-pill status-active">Resolved</span></td>
-                            </tr>
-                            <tr>
-                                <td style="font-family: monospace; color: var(--accent-cyan);">PWR-9982</td>
-                                <td>15 min ago</td>
-                                <td>Efficiency</td>
-                                <td>Switched Cluster B to Eco-Mode during grid peak.</td>
-                                <td style="color: var(--success);">-45kW</td>
-                                <td><span class="status-pill status-active">Executing</span></td>
-                            </tr>
-                            <tr>
-                                <td style="font-family: monospace; color: var(--accent-cyan);">HW-0012</td>
-                                <td>1 hour ago</td>
-                                <td>Predictive</td>
-                                <td>ECC error spike on H100-Rack-4; Predicted failure 88%.</td>
-                                <td style="color: var(--warning);">Pre-empted</td>
-                                <td><span class="status-pill status-warning">Alerted</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <!-- GPU Clusters Page -->
+    <div id="page-clusters" class="page-content" style="display: none;">
+        <div class="card">
+            <div class="chart-header">
+                <div style="font-size: 18px; font-weight: 600;">Global Node Inventory</div>
+                <div style="font-size: 12px; color: var(--text-secondary);" id="node-count">0 Nodes Detected
                 </div>
             </div>
-        </main>
+            <table id="clusters-table">
+                <thead>
+                    <tr>
+                        <th>Device ID</th>
+                        <th>Model</th>
+                        <th>Memory</th>
+                        <th>Util %</th>
+                        <th>Power</th>
+                        <th>Temp</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="clusters-body">
+                    <!-- Injected by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Power & PUE Page -->
+    <div id="page-power" class="page-content" style="display: none;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <div class="card">
+                <h3>Power Usage Components</h3>
+                <div id="power-breakdown" style="padding-top: 20px;">
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>IT Load (GPUs & CPUs)</span>
+                            <span id="it-load-val">-- W</span>
+                        </div>
+                        <div style="height: 8px; background: #333; border-radius: 4px; overflow: hidden;">
+                            <div id="it-load-bar" style="width: 80%; height: 100%; background: var(--accent-cyan);">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Cooling & Infrastructure</span>
+                            <span id="facility-load-val">-- W</span>
+                        </div>
+                        <div style="height: 8px; background: #333; border-radius: 4px; overflow: hidden;">
+                            <div id="facility-load-bar"
+                                style="width: 20%; height: 100%; background: var(--accent-purple);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Efficiency Metrics</h3>
+                <div style="padding-top: 20px; display: flex; flex-direction: column; gap: 20px;">
+                    <div class="card" style="background: rgba(0,255,255,0.05);">
+                        <div style="font-size: 12px; color: var(--text-secondary);">ENERGY RECOVERY STATUS</div>
+                        <div style="font-size: 24px; font-weight: 700; color: var(--success); margin-top: 5px;">
+                            Active</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Heat reuse efficiency: 84%</div>
+                    </div>
+                    <div class="card" style="background: rgba(157,0,255,0.05);">
+                        <div style="font-size: 12px; color: var(--text-secondary);">RENEWABLE MIX</div>
+                        <div style="font-size: 24px; font-weight: 700; color: var(--text-primary); margin-top: 5px;">
+                            62.5%</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Solar/Wind direct-to-rack</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topology Page -->
+    <div id="page-topology" class="page-content" style="display: none;">
+        <div class="card" style="min-height: 600px;">
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 24px;">Hardware Mesh View</div>
+            <div id="topology-grid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+    </main>
     </div>
 
     <script>
+        // Configuration
+        const AUTH_TOKEN = "esnode-master-secret";
+        const FETCH_INTERVAL = 3000;
+
         // Initialize Icons
         lucide.createIcons();
 
         // Simple Chart Visualization
-        const chart = document.getElementById('powerChart');
-        for (let i = 0; i < 20; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            const h = Math.random() * 80 + 20;
-            bar.style.height = '0%';
-            chart.appendChild(bar);
+        function initCharts() {
+            const chart = document.getElementById('powerChart');
+            chart.innerHTML = '';
+            for (let i = 0; i < 20; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const h = Math.random() * 80 + 20;
+                bar.style.height = '0%';
+                chart.appendChild(bar);
 
-            setTimeout(() => {
-                bar.style.height = h + '%';
-                bar.style.opacity = (h / 100);
-            }, i * 50);
+                setTimeout(() => {
+                    bar.style.height = h + '%';
+                    bar.style.opacity = (h / 100);
+                }, i * 50);
+            }
+        }
+        initCharts();
+
+        // Page Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const pages = document.querySelectorAll('.page-content');
+        const headers = document.querySelectorAll('.page-header');
+
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Update Sidebar
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                // Determine target page
+                const text = item.innerText.toLowerCase();
+                let target = 'overview';
+                if (text.includes('cluster')) target = 'clusters';
+                if (text.includes('power')) target = 'power';
+                if (text.includes('topology')) target = 'topology';
+                if (text.includes('orchestrator')) target = 'settings';
+
+                // Update Visibility
+                pages.forEach(p => p.style.display = 'none');
+                document.getElementById(`page-${target}`).style.display = 'block';
+
+                headers.forEach(h => h.style.display = 'none');
+                const headerId = `header-${target}`;
+                if (document.getElementById(headerId)) {
+                    document.getElementById(headerId).style.display = 'flex';
+                }
+
+                if (target === 'overview') initCharts();
+                if (target === 'settings') loadSettings();
+            });
+        });
+
+        // Data Update Loop
+        async function updateDashboard() {
+            try {
+                let nodes = [];
+                let statusData = null;
+                const PUE_DEFAULT = 1.07;
+
+                // 1. Fetch Global Nodes (from MCP)
+                try {
+                    const res = await fetch('/api/mcp/nodes', {
+                        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+                    });
+                    if (res.ok) {
+                        nodes = await res.json();
+                    }
+                } catch (e) {
+                    console.warn("MCP fetch failed", e);
+                }
+
+                // 2. Fetch Local Status (for RCA & Fallback)
+                try {
+                    const statusRes = await fetch('/status', {
+                        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+                    });
+                    if (statusRes.ok) {
+                        statusData = await statusRes.json();
+                    }
+                } catch (e) {
+                    console.warn("Status fetch failed", e);
+                }
+
+                // 3. Fallback: Use Local Status if MCP returned no nodes
+                if (nodes.length === 0 && statusData) {
+                    // Add Host
+                    nodes.push({
+                        id: statusData.primary_nic || "Local-Host",
+                        kind: "cpu",
+                        mem_gb: (statusData.mem_total_bytes || 0) / 1024 / 1024 / 1024,
+                        current_load: (statusData.cpu_util_percent || 0) / 100,
+                        real_power_watts: statusData.node_power_watts || 150, // Mock base power
+                        temperature_celsius: 42.0 // Mock temp
+                    });
+
+                    // Add GPUs
+                    if (statusData.gpus) {
+                        statusData.gpus.forEach(gpu => {
+                            nodes.push({
+                                id: gpu.uuid || gpu.gpu,
+                                kind: "gpu",
+                                mem_gb: (gpu.memory_total_bytes || 0) / 1024 / 1024 / 1024,
+                                current_load: (gpu.util_percent || 0) / 100,
+                                real_power_watts: gpu.power_watts || 300,
+                                temperature_celsius: gpu.temperature_celsius || 45.0
+                            });
+                        });
+                    }
+                }
+
+                // 4. Update Overview Stats
+                let totalPower = 0;
+                let avgUtil = 0;
+                let avgTemp = 0;
+
+                if (nodes.length > 0) {
+                    avgUtil = nodes.reduce((acc, n) => acc + (n.current_load * 100), 0) / nodes.length;
+                    avgTemp = nodes.reduce((acc, n) => acc + (n.temperature_celsius || 40), 0) / nodes.length;
+                    totalPower = nodes.reduce((acc, n) => acc + (n.real_power_watts || 0), 0);
+
+                    document.getElementById('stat-util').innerText = avgUtil.toFixed(1) + '%';
+                    document.getElementById('stat-temp').innerText = avgTemp.toFixed(1) + '°C';
+                }
+
+                // Update Headers
+                const totalKw = (totalPower / 1000).toFixed(2);
+                if (document.getElementById('total-power-header')) document.getElementById('total-power-header').innerText = totalKw + ' kW';
+                if (document.getElementById('global-pue-header')) document.getElementById('global-pue-header').innerText = PUE_DEFAULT.toFixed(2);
+
+                // 5. Fetch & Display Historical Events
+                try {
+                    const eventsRes = await fetch('/v1/events/history?limit=10', {
+                        headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+                    });
+                    if (eventsRes.ok) {
+                        const events = await eventsRes.json();
+                        const tbody = document.getElementById('activity-log-body');
+                        if (tbody) {
+                            tbody.innerHTML = '';
+                            events.forEach(evt => {
+                                const tr = document.createElement('tr');
+                                const date = new Date(evt.timestamp_ms).toLocaleTimeString();
+                                const impactClass = evt.confidence > 0.8 ? 'text-danger' : 'text-warning';
+                                const impactText = evt.confidence > 0.8 ? 'Critical' : 'Warning';
+                                tr.innerHTML = `
+                                    <td class="timestamp">${date}</td>
+                                    <td>${evt.root_cause}</td>
+                                    <td>${evt.details}</td>
+                                    <td class="${impactClass}">${impactText} (${(evt.confidence * 100).toFixed(0)}%)</td>
+                                    <td><span class="status-pill status-active">Resolved</span></td>
+                                `;
+                                tbody.appendChild(tr);
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Events fetch failed", e);
+                }
+
+                // 5. Update Power & PUE Page
+                if (document.getElementById('it-load-val')) {
+                    document.getElementById('it-load-val').innerText = totalPower.toFixed(0) + ' W';
+
+                    // Facility Load = IT Load * (PUE - 1)
+                    const facilityLoad = totalPower * (PUE_DEFAULT - 1);
+                    document.getElementById('facility-load-val').innerText = facilityLoad.toFixed(0) + ' W';
+
+                    // Update Bars
+                    const totalLoad = totalPower + facilityLoad;
+                    const itPercent = totalLoad > 0 ? (totalPower / totalLoad) * 100 : 0;
+                    const facPercent = totalLoad > 0 ? (facilityLoad / totalLoad) * 100 : 0;
+
+                    document.getElementById('it-load-bar').style.width = itPercent + '%';
+                    document.getElementById('facility-load-bar').style.width = facPercent + '%';
+                }
+
+                // 6. Update Clusters Page
+                const clustersBody = document.getElementById('clusters-body');
+                clustersBody.innerHTML = '';
+                document.getElementById('node-count').innerText = `${nodes.length} Nodes Detected`;
+
+                nodes.forEach(node => {
+                    const row = document.createElement('tr');
+                    const temp = node.temperature_celsius || 0;
+                    const statusClass = temp > 85 ? 'status-danger' : 'status-active';
+                    const statusText = temp > 85 ? 'Draining' : 'Healthy';
+
+                    row.innerHTML = `
+                        <td style="font-family: monospace; color: var(--accent-cyan);">${node.id.substring(0, 20)}...</td>
+                        <td>${node.kind === 'gpu' ? 'NVIDIA Accelerator' : 'Compute Node'}</td>
+                        <td>${(node.mem_gb || 0).toFixed(1)} GB</td>
+                        <td>${(node.current_load * 100).toFixed(1)}%</td>
+                        <td>${(node.real_power_watts || 0).toFixed(0)} W</td>
+                        <td>${temp.toFixed(1)}°C</td>
+                        <td><span class="status-pill ${statusClass}">${statusText}</span></td>
+                    `;
+                    clustersBody.appendChild(row);
+                });
+
+                // 7. Update Topology Mesh
+                const topologyGrid = document.getElementById('topology-grid');
+                topologyGrid.innerHTML = '';
+                nodes.forEach(node => {
+                    const dev = document.createElement('div');
+                    dev.className = 'card';
+                    dev.style.padding = '15px';
+                    dev.style.textAlign = 'center';
+                    dev.style.borderColor = node.current_load > 0.8 ? 'var(--accent-purple)' : 'var(--border)';
+
+                    dev.innerHTML = `
+                        <i data-lucide="${node.kind === 'gpu' ? 'cpu' : 'server'}" style="color: ${node.current_load > 0.8 ? 'var(--accent-purple)' : 'var(--accent-cyan)'}; margin-bottom: 10px;"></i>
+                        <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${node.id}</div>
+                        <div style="font-size: 14px; font-weight: 700; margin-top: 5px;">${(node.current_load * 100).toFixed(0)}%</div>
+                    `;
+                    topologyGrid.appendChild(dev);
+                });
+                lucide.createIcons();
+
+                // 8. Update Activity Log from RCA Events
+                if (statusData && statusData.rca_events && statusData.rca_events.length > 0) {
+                    const activityBody = document.getElementById('activity-log-body');
+                    activityBody.innerHTML = '';
+                    statusData.rca_events.forEach(event => {
+                        const row = document.createElement('tr');
+                        const statusClass = 'status-warning'; // Default for RCA
+                        row.innerHTML = `
+                            <td style="font-family: monospace; color: var(--accent-cyan);">${event.gpu_id}</td>
+                            <td>Just now</td>
+                            <td>${event.root_cause}</td>
+                            <td>${event.details}</td>
+                            <td style="color: var(--success);">${(event.confidence * 100).toFixed(0)}% Conf.</td>
+                            <td><span class="status-pill ${statusClass}">Active</span></td>
+                        `;
+                        activityBody.appendChild(row);
+                    });
+                }
+
+            } catch (err) {
+                console.error("Dashboard Tick Failed:", err);
+            }
         }
 
-        // Live update mock values
-        setInterval(() => {
-            const val = (94.2 + (Math.random() - 0.5)).toFixed(1);
-            document.querySelectorAll('.card-value')[1].innerText = val + '%';
-        }, 3000);
+        // --- Settings Management ---
+        async function loadSettings() {
+            try {
+                const res = await fetch('/orchestrator/config', {
+                    headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+                });
+                if (res.ok) {
+                    const config = await res.json();
+
+                    const map = {
+                        'enable_zombie_reaper': config.enable_zombie_reaper,
+                        'enable_turbo_mode': config.enable_turbo_mode,
+                        'enable_bin_packing': config.enable_bin_packing,
+                        'enable_flash_preemption': config.enable_flash_preemption,
+                        'enable_dataset_prefetch': config.enable_dataset_prefetch,
+                        'enable_bandwidth_reserve': config.enable_bandwidth_reserve,
+                        'enable_fs_cleanup': config.enable_fs_cleanup,
+                        'enable_thermal_management': config.enable_thermal_management,
+                    };
+
+                    for (const [id, val] of Object.entries(map)) {
+                        const el = document.getElementById(id);
+                        if (el) el.checked = val;
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load settings", e);
+            }
+        }
+
+        async function saveSettings() {
+            const config = {
+                enabled: true,
+                token: null,
+                allow_public: false,
+
+                enable_zombie_reaper: document.getElementById('enable_zombie_reaper').checked,
+                enable_turbo_mode: document.getElementById('enable_turbo_mode').checked,
+                enable_bin_packing: document.getElementById('enable_bin_packing').checked,
+                enable_flash_preemption: document.getElementById('enable_flash_preemption').checked,
+
+                enable_dataset_prefetch: document.getElementById('enable_dataset_prefetch').checked,
+                enable_bandwidth_reserve: document.getElementById('enable_bandwidth_reserve').checked,
+                enable_fs_cleanup: document.getElementById('enable_fs_cleanup').checked,
+                enable_thermal_management: document.getElementById('enable_thermal_management').checked,
+            };
+
+            try {
+                const res = await fetch('/orchestrator/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AUTH_TOKEN}`
+                    },
+                    body: JSON.stringify(config)
+                });
+
+                if (res.ok) {
+                    const statusEl = document.getElementById('settings-status');
+                    statusEl.style.display = 'block';
+                    setTimeout(() => statusEl.style.display = 'none', 3000);
+                } else {
+                    alert('Failed to save configuration.');
+                }
+            } catch (e) {
+                console.error("Save failed", e);
+                alert('Connection error while saving.');
+            }
+        }
+
+        // Initialize
+        initCharts();
+        setInterval(updateDashboard, 2000); // Use 2000ms explicitly or existing const
+        updateDashboard();
     </script>
 </body>
 

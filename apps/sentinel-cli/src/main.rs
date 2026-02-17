@@ -8,7 +8,7 @@ use std::{
     time::Duration,
 };
 
-use sentinel_core::{Agent, AgentConfig, ConfigOverrides, LogLevel};
+use sentinel_core::{Agent, AgentConfig, ConfigOverrides, LogLevel, RunMode};
 use anyhow::{anyhow, bail, Context, Result};
 use clap::{Parser, Subcommand, ValueEnum};
 
@@ -27,6 +27,10 @@ struct Cli {
     /// Disable ANSI colors (applies to TUI + non-interactive output).
     #[arg(long)]
     no_color: bool,
+
+    /// Operational mode: prod, dev, demo (default: prod).
+    #[arg(long, env = "SENTINEL_MODE")]
+    mode: Option<String>,
 
     /// Address for HTTP listener, e.g. 0.0.0.0:9100
     #[arg(long, env = "SENTINEL_LISTEN_ADDRESS")]
@@ -121,6 +125,14 @@ struct Cli {
     /// URL for application metrics (e.g. http://localhost:8000/metrics)
     #[arg(long, env = "SENTINEL_APP_METRICS_URL")]
     pub app_metrics_url: Option<String>,
+
+    /// Connection string for Postgres/TimescaleDB
+    #[arg(long, env = "SENTINEL_DATABASE_URL")]
+    pub database_url: Option<String>,
+
+    /// Enable local embedded SQLite DB for RCA/Events
+    #[arg(long, env = "SENTINEL_ENABLE_LOCAL_DB")]
+    pub enable_local_db: Option<bool>,
 
     /// Log level (error, warn, info, debug, trace)
     #[arg(long, env = "SENTINEL_LOG_LEVEL")]
@@ -227,7 +239,7 @@ async fn main() -> Result<()> {
             // Instantiate drivers from config
             let drivers = instantiate_drivers(&config)?;
             
-            let agent = Agent::new(config, drivers)?;
+            let agent = Agent::new(config, drivers).await?;
             agent.run().await
         }
         Command::Status => {
@@ -301,6 +313,7 @@ fn cli_to_overrides(cli: &Cli) -> Result<ConfigOverrides> {
     };
 
     Ok(ConfigOverrides {
+        mode: parse_run_mode(cli.mode.as_deref())?,
         listen_address: cli.listen_address.clone(),
         scrape_interval: parse_duration(cli.scrape_interval.as_deref())?,
         enable_cpu: cli.enable_cpu,
@@ -325,6 +338,8 @@ fn cli_to_overrides(cli: &Cli) -> Result<ConfigOverrides> {
         local_tsdb_path: cli.local_tsdb_path.clone(),
         local_tsdb_retention_hours: cli.local_tsdb_retention_hours,
         local_tsdb_max_disk_mb: cli.local_tsdb_max_disk_mb,
+        database_url: cli.database_url.clone(),
+        enable_local_db: cli.enable_local_db,
         log_level: parse_log_level(cli.log_level.as_deref())?,
         orchestrator,
         efficiency_profile_path: None,
@@ -352,6 +367,20 @@ fn parse_log_level(input: Option<&str>) -> Result<Option<LogLevel>> {
             "debug" => LogLevel::Debug,
             "trace" => LogLevel::Trace,
             other => bail!("unknown log level {other}"),
+        };
+        Ok(Some(parsed))
+    } else {
+        Ok(None)
+    }
+}
+
+fn parse_run_mode(input: Option<&str>) -> Result<Option<RunMode>> {
+    if let Some(mode) = input {
+        let parsed = match mode.to_ascii_lowercase().as_str() {
+            "prod" | "production" => RunMode::Prod,
+            "dev" | "development" => RunMode::Dev,
+            "demo" => RunMode::Demo,
+            other => bail!("unknown run mode {other}"),
         };
         Ok(Some(parsed))
     } else {

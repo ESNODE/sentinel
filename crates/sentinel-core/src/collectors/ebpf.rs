@@ -30,11 +30,17 @@ pub struct EbpfCollector {
 /// Configuration for eBPF collector
 #[derive(Debug, Clone)]
 pub struct EbpfConfig {
+    #[allow(dead_code)]
     pub sampling_interval_ms: u64,
+    #[allow(dead_code)]
     pub enable_cpu_perf: bool,
+    #[allow(dead_code)]
     pub enable_rapl: bool,
+    #[allow(dead_code)]
     pub enable_memory: bool,
+    #[allow(dead_code)]
     pub enable_network: bool,
+    #[allow(dead_code)]
     pub sample_buffer_size: usize,
 }
 
@@ -54,6 +60,7 @@ impl Default for EbpfConfig {
 /// Single eBPF sample
 #[derive(Debug, Clone)]
 pub struct EbpfSample {
+    #[allow(dead_code)]
     pub timestamp_us: u64,
     pub cpu_cycles: u64,
     pub cpu_instructions: u64,

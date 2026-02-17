@@ -149,6 +149,8 @@ ESNODE Sentinel is designed for production reliability:
 - **WASM Isolation:** Third-party skills run in a secure sandbox.
 - **Enterprise-Grade TUI:** No browser needed for deep diagnostics.
 - **Security & Cloud Console:** Full [Security & Console Guide](./docs/SECURITY_CONSOLE.md) for HTTPS and SSO.
+- **Global Fleet Orchestration:** Learn about [MCP & Autonomous Tuning](./docs/MCP_ORCHESTRATION.md).
+- **Secure Automation:** Extend Sentinel via [WASM Skills & Performance Layers](./docs/WASM_SKILLS.md).
 - **Strategic Adoption:** Read our [Enterprise & Mega-Cap Strategy](./docs/enterprise/) for large-scale fleet integration.
 
 ---

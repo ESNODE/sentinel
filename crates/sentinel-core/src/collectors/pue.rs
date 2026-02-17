@@ -108,12 +108,12 @@ impl Collector for PueCalculator {
     }
 
     async fn collect(&mut self, metrics: &MetricsRegistry) -> anyhow::Result<()> {
-        self.collect_internal(metrics).await
+        self.collect_internal(metrics)
     }
 }
 
 impl PueCalculator {
-    pub async fn collect_internal(&self, metrics: &MetricsRegistry) -> anyhow::Result<()> {
+    pub fn collect_internal(&self, metrics: &MetricsRegistry) -> anyhow::Result<()> {
         let pue = self.calculate_pue();
         let efficiency = self.calculate_efficiency();
         let overhead = self.calculate_overhead();
@@ -157,7 +157,7 @@ impl Collector for PueCollectorWrapper {
     }
 
     async fn collect(&mut self, metrics: &MetricsRegistry) -> anyhow::Result<()> {
-        self.calculator.collect_internal(metrics).await
+        self.calculator.collect_internal(metrics)
     }
 }
 

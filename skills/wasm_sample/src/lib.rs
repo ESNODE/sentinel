@@ -11,8 +11,10 @@ pub extern "C" fn allocate(size: usize) -> *mut u8 {
 }
 
 #[no_mangle]
-pub extern "C" fn init(config_ptr: *const u8, config_len: usize) {
-    let _config_str = unsafe {
+/// # Safety
+/// The caller must ensure that `config_ptr` points to a valid sequence of `config_len` bytes.
+pub unsafe extern "C" fn init(config_ptr: *const u8, config_len: usize) {
+    let _config_str = {
         let slice = std::slice::from_raw_parts(config_ptr, config_len);
         std::str::from_utf8_unchecked(slice)
     };

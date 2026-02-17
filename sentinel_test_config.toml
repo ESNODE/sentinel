@@ -1,0 +1,17 @@
+[orchestrator]
+enabled = true
+allow_public = true
+token = "sentinel-core-token"
+enable_zombie_reaper = false
+enable_turbo_mode = false
+enable_bin_packing = false
+enable_flash_preemption = false
+enable_dataset_prefetch = false
+enable_bandwidth_reserve = false
+enable_fs_cleanup = false
+enable_thermal_management = false
+
+# Ensure HTTP listener is on the expected port
+listen_address = "0.0.0.0:9100"
+scrape_interval = "1s"
+log_level = "info"

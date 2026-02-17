@@ -1,0 +1,43 @@
+# Build Stage
+FROM rustlang/rust:nightly-bookworm-slim AS builder
+
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    cmake \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/sentinel
+COPY . .
+
+# Build the core binary
+RUN cargo build --release --bin esnode-sentinel
+
+# Runtime Stage
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libssl-dev \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy binary from builder
+COPY --from=builder /usr/src/sentinel/target/release/esnode-sentinel /app/esnode-sentinel
+COPY --from=builder /usr/src/sentinel/public /app/public
+COPY --from=builder /usr/src/sentinel/skills /app/skills
+
+# Create a non-privileged user
+RUN groupadd -r esnode && useradd -r -g esnode esnode \
+    && chown -R esnode:esnode /app
+
+USER esnode
+
+EXPOSE 9100
+
+ENTRYPOINT ["/app/esnode-sentinel"]
+CMD ["daemon"]

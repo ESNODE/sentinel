@@ -30,7 +30,7 @@ use collectors::{
 };
 #[cfg(feature = "ebpf")]
 use crate::collectors::ebpf::{EbpfCollector, EbpfConfig};
-pub use config::{AgentConfig, ConfigOverrides, LogLevel};
+pub use config::{AgentConfig, ConfigOverrides, LogLevel, RunMode};
 use http::{build_router, serve, HttpState};
 use metrics::MetricsRegistry;
 use std::net::SocketAddr;
@@ -45,11 +45,14 @@ pub struct Agent {
     collectors: Vec<Box<dyn Collector>>,
     healthy: Arc<AtomicBool>,
     status: state::StatusState,
+    pub storage: Arc<storage::Storage>,
     local_tsdb: Option<Arc<LocalTsdb>>,
 }
+pub mod storage;
 
 impl Agent {
-    pub fn new(config: AgentConfig, drivers: Vec<Box<dyn drivers::Driver>>) -> anyhow::Result<Self> {
+    pub async fn new(config: AgentConfig, drivers: Vec<Box<dyn drivers::Driver>>) -> anyhow::Result<Self> {
+        let storage = Arc::new(storage::Storage::new(&config).await?);
         let metrics = MetricsRegistry::new()?;
         let healthy = Arc::new(AtomicBool::new(true));
         let status = state::StatusState::new(healthy.clone());
@@ -161,7 +164,7 @@ impl Agent {
             collectors.push(Box::new(PowerCollector::new(
                 status.clone(),
                 config.node_power_envelope_watts,
-                Some(power_aggregator.clone()),
+                Some(power_aggregator),
             )));
         } else {
             metrics
@@ -224,6 +227,9 @@ impl Agent {
                 &wasm_bytes,
                 Arc::new(metrics.clone()),
                 &config_json,
+                skill_cfg.capabilities.clone(),
+                skill_cfg.signature.clone(),
+                skill_cfg.public_key.clone(),
             ) {
                 Ok(collector) => {
                     collectors.push(Box::new(collector));
@@ -290,6 +296,7 @@ impl Agent {
             collectors,
             healthy,
             status,
+            storage,
             local_tsdb,
         })
     }
@@ -301,6 +308,7 @@ impl Agent {
             collectors,
             healthy,
             status,
+            storage,
             local_tsdb,
         } = self;
 
@@ -309,6 +317,13 @@ impl Agent {
         let healthy_clone = healthy.clone();
         let scrape_interval = config.scrape_interval;
         let status_state = status.clone();
+
+        if config.mode == crate::config::RunMode::Demo {
+            info!("ENTERPRISE DEMO MODE ACTIVE: Pre-loading mission-critical telemetry.");
+            status_state.load_demo_data();
+        } else if config.mode == crate::config::RunMode::Dev {
+             info!("DEV MODE ACTIVE: Enhanced logging and relaxed security.");
+        }
         let tsdb_for_collection = local_tsdb.clone();
         let tsdb_for_shutdown = local_tsdb.clone();
         let tsdb_pruner_handle = local_tsdb
@@ -322,7 +337,14 @@ impl Agent {
                     enabled: orch_config.enabled,
                     token: orch_config.token.clone(),
                     allow_public: orch_config.allow_public,
-                    ..Default::default()
+                    enable_zombie_reaper: orch_config.enable_zombie_reaper,
+                    enable_turbo_mode: orch_config.enable_turbo_mode,
+                    enable_bin_packing: orch_config.enable_bin_packing,
+                    enable_flash_preemption: orch_config.enable_flash_preemption,
+                    enable_dataset_prefetch: orch_config.enable_dataset_prefetch,
+                    enable_bandwidth_reserve: orch_config.enable_bandwidth_reserve,
+                    enable_fs_cleanup: orch_config.enable_fs_cleanup,
+                    enable_thermal_management: orch_config.enable_thermal_management,
                 };
                 let orchestrator = sentinel_orchestrator::Orchestrator::new(devices, external_config);
                 Some(sentinel_orchestrator::AppState {
@@ -343,9 +365,62 @@ impl Agent {
                 sentinel_orchestrator::run_loop(loop_state).await;
              });
         }
+
+        // --- Mission Control Plane (MCP) Aggregator ---
+        if config.enable_mcp {
+            if let Some(orch_cfg) = &config.orchestrator {
+                if !orch_cfg.clusters.is_empty() {
+                    let clusters = orch_cfg.clusters.clone();
+                    let mcp_status = status.clone();
+                    let client = reqwest::Client::new();
+                    let mcp_token = orch_cfg.token.clone();
+                    
+                    info!("MCP ACTIVE: Aggregating telemetry from {} clusters...", clusters.len());
+                    
+                    tokio::spawn(async move {
+                        let mut interval = tokio::time::interval(std::time::Duration::from_secs(10));
+                        loop {
+                            interval.tick().await;
+                            for cluster in &clusters {
+                                for endpoint in &cluster.endpoints {
+                                    let url = if endpoint.contains("://") {
+                                        format!("{}/status", endpoint)
+                                    } else {
+                                        format!("http://{}/status", endpoint)
+                                    };
+                                    
+                                    let mut req = client.get(&url);
+                                    if let Some(tok) = &mcp_token {
+                                        req = req.bearer_auth(tok);
+                                    }
+                                    
+                                    match req.send().await {
+                                        Ok(resp) => {
+                                            if let Ok(snap) = resp.json::<state::StatusSnapshot>().await {
+                                                // Aggregate GPUs from remote node
+                                                let mut gpus = mcp_status.gpu_status.write().unwrap();
+                                                for mut remote_gpu in snap.gpus {
+                                                    remote_gpu.gpu = format!("{}:{}", cluster.name, remote_gpu.gpu);
+                                                    // In a real system, we'd update or append based on UUID
+                                                    gpus.push(remote_gpu);
+                                                }
+                                            }
+                                        }
+                                        Err(e) => {
+                                            tracing::debug!("MCP: Failed to scrape endpoint {}: {}", endpoint, e);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
         
         let orch_state_clone_for_update = orchestrator_state_clone.clone();
 
+        let storage_for_collection = storage.clone();
         let collection_task = tokio::spawn(async move {
             let mut ticker = tokio::time::interval(scrape_interval);
             let mut last_tsdb_write_ms: i64 = 0;
@@ -408,6 +483,13 @@ impl Agent {
                         details: event.description.clone(),
                     }
                 }).collect();
+                
+                // Persist RCA events to Storage
+                for event in &aiops_rca {
+                    if let Err(e) = storage_for_collection.save_rca_event(event).await {
+                         warn!("Failed to persist RCA event: {}", e);
+                    }
+                }
                 
                 status_state.update_rca_events(aiops_rca);
                 
@@ -581,6 +663,7 @@ impl Agent {
             listen_is_loopback: listen_is_loopback(&config.listen_address),
             orchestrator_token: config.orchestrator.as_ref().and_then(|o| o.token.clone()),
             security: config.security.clone(),
+            storage: storage.clone(),
         };
         let router = build_router(http_state);
         let http_task = serve(&config.listen_address, router)

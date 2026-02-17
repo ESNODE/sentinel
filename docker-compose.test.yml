@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  sentinel-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.unified
+    container_name: sentinel-master
+    volumes:
+      - ./deploy/docker/master-docker.toml:/app/sentinel.toml
+    command: [ "--config", "/app/sentinel.toml", "daemon" ]
+    ports:
+      - "9100:9100"
+    environment:
+      - RUST_LOG=info
+      - SENTINEL_SECURITY__ENABLE_AUTH=true
+      - SENTINEL_DEMO_MODE=true
+    depends_on:
+      sentinel-node-01:
+        condition: service_healthy
+
+  sentinel-node-01:
+    build:
+      context: .
+      dockerfile: Dockerfile.unified
+    container_name: sentinel-node-01
+    volumes:
+      - ./deploy/docker/node-docker.toml:/app/sentinel.toml
+    command: [ "--config", "/app/sentinel.toml", "daemon" ]
+    environment:
+      - RUST_LOG=info
+      - SENTINEL_SECURITY__ENABLE_AUTH=true
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9100/healthz" ]
+      interval: 5s
+      timeout: 2s
+      retries: 5

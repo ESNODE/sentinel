@@ -27,6 +27,24 @@ docker buildx build \
   --push .
 ```
 
+## Enterprise Unified Build (Dockerfile.unified)
+For environments where pre-built binaries are not preferred in the build context, use the multi-stage **Unified Dockerfile**. This manages the Rust toolchain and builds the binary internally.
+
+### Build and Run Fleet
+```bash
+# Build the unified image
+docker build -f Dockerfile.unified -t esnode-sentinel:enterprise .
+
+# Launch a local test fleet (Master + Worker)
+docker-compose -f docker-compose.test.yml up --build
+```
+
+### Verification
+Once the fleet is up, verify the MCP aggregation:
+```bash
+curl -H "Authorization: Bearer esnode-master-secret" http://localhost:9100/api/mcp/nodes
+```
+
 > Note: distroless expects static binaries; ensure NVML/libnvidia-ml.so is available via the NVIDIA runtime/host drivers when running with GPU access.
 
 ### Run (basic)

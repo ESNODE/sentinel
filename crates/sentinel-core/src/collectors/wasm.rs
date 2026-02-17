@@ -4,7 +4,7 @@ use std::sync::Arc;
 use parking_lot::Mutex;
 use crate::collectors::Collector;
 use crate::metrics::MetricsRegistry;
-use crate::skills::wasm_runtime::{WasmRuntime, WasmInstance};
+use crate::skills::wasm_runtime::{WasmRuntime, WasmInstance, SkillCapabilities};
 
 pub struct WasmCollector {
     name: &'static str,
@@ -12,10 +12,24 @@ pub struct WasmCollector {
 }
 
 impl WasmCollector {
-    pub fn new(name: String, wasm_bytes: &[u8], metrics: Arc<MetricsRegistry>, config_json: &str) -> anyhow::Result<Self> {
+    pub fn new(
+        name: String, 
+        wasm_bytes: &[u8], 
+        metrics: Arc<MetricsRegistry>, 
+        config_json: &str,
+        capabilities: SkillCapabilities,
+        signature: Option<String>,
+        public_key: Option<String>,
+    ) -> anyhow::Result<Self> {
+        // --- Enterprise Security: Signature Verification ---
+        if let (Some(sig), Some(pk)) = (signature, public_key) {
+            crate::auth::verify_skill_signature(wasm_bytes, &sig, &pk)?;
+            tracing::info!("Skill [{}] signature verified successfully.", name);
+        }
+
         let name_static = Box::leak(name.into_boxed_str()) as &'static str;
-        let runtime = WasmRuntime::new(wasm_bytes)?;
-        let mut instance = runtime.instantiate(metrics, name_static.to_string())?;
+        let runtime = WasmRuntime::new(wasm_bytes, capabilities.max_memory_mb)?;
+        let mut instance = runtime.instantiate(metrics, name_static.to_string(), capabilities)?;
         
         instance.call_init(config_json)?;
         

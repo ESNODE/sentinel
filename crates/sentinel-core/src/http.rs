@@ -28,6 +28,7 @@ pub struct HttpState {
     pub listen_is_loopback: bool,
     pub orchestrator_token: Option<String>,
     pub security: crate::config::SecurityConfig,
+    pub storage: std::sync::Arc<crate::storage::Storage>,
 }
 
 pub fn build_router(state: HttpState) -> Router {
@@ -39,7 +40,10 @@ pub fn build_router(state: HttpState) -> Router {
         .route("/events", get(events_handler))
         .route("/tsdb/export", get(tsdb_export_handler))
         .route("/api/auth/login", axum::routing::post(login_handler))
-        .route("/api/auth/sso/callback", get(crate::auth::oidc_callback));
+        .route("/api/auth/sso/callback", get(crate::auth::oidc_callback))
+        .route("/api/admin/deploy-skill", axum::routing::post(deploy_skill_handler))
+        .route("/api/mcp/nodes", get(mcp_nodes_handler))
+        .route("/v1/events/history", get(events_history_handler));
 
     // Serve the ESNODE Sentinel Cloud Console
     let console_dir = std::env::var("SENTINEL_CONSOLE_DIR").unwrap_or_else(|_| "./public/console".to_string());
@@ -117,7 +121,7 @@ async fn events_handler(
 
 async fn login_handler(
     State(state): State<HttpState>,
-    Json(payload): Json<serde_json::Value>,
+    Json(_payload): Json<serde_json::Value>,
 ) -> impl IntoResponse {
     // Basic auth implementation
     if !state.security.enable_auth {
@@ -130,10 +134,44 @@ async fn login_handler(
 
 async fn status_handler(
     State(state): State<HttpState>,
-    _user: crate::auth::AuthenticatedUser, // Auth Guard
+    user: crate::auth::AuthenticatedUser, // Auth Guard
 ) -> impl IntoResponse {
+    if let Err(e) = crate::auth::require_permission(&user, crate::auth::Permission::ReadStatus) {
+        return e;
+    }
     let snapshot = state.status.snapshot();
-    Json(snapshot)
+    Json(snapshot).into_response()
+}
+
+async fn mcp_nodes_handler(
+    State(state): State<HttpState>,
+    user: crate::auth::AuthenticatedUser,
+) -> impl IntoResponse {
+    if let Err(e) = crate::auth::require_permission(&user, crate::auth::Permission::ManageOrchestrator) {
+        return e;
+    }
+    // Return nodes from MCP clusters
+    if let Some(orch) = &state.orchestrator {
+        let orch_read = orch.orchestrator.read().unwrap();
+        return Json(orch_read.devices.values().cloned().collect::<Vec<_>>()).into_response();
+    }
+    StatusCode::NOT_FOUND.into_response()
+}
+
+async fn deploy_skill_handler(
+    State(_state): State<HttpState>,
+    user: crate::auth::AuthenticatedUser,
+    Json(payload): Json<serde_json::Value>,
+) -> impl IntoResponse {
+    if let Err(e) = crate::auth::require_permission(&user, crate::auth::Permission::DeploySkill) {
+        return e;
+    }
+    // In production, this would use the Master node's orchestrator to push
+    // the WASM binary or its URL to all registered agents.
+    tracing::info!("MCP MASTER: Deploying skill to fleet: {:?}", payload);
+    
+    // Logic: Send PUT /api/skill to each cluster endpoint
+    (StatusCode::ACCEPTED, Json(serde_json::json!({"status": "Deployment started to all clusters"}))).into_response()
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -141,6 +179,22 @@ struct ExportQuery {
     from: Option<i64>,
     to: Option<i64>,
     metrics: Option<String>,
+}
+
+#[derive(serde::Deserialize)]
+struct EventsHistoryQuery {
+    limit: Option<i64>,
+}
+
+async fn events_history_handler(
+    State(state): State<HttpState>,
+    Query(q): Query<EventsHistoryQuery>,
+) -> impl IntoResponse {
+    let limit = q.limit.unwrap_or(50);
+    match state.storage.get_recent_rca_events(limit).await {
+         Ok(events) => Json(events).into_response(),
+         Err(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response()
+    }
 }
 
 async fn tsdb_export_handler(

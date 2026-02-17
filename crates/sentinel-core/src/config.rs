@@ -4,10 +4,39 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+#[allow(clippy::struct_excessive_bools)]
 pub struct OrchestratorConfig {
     pub enabled: bool,
     pub token: Option<String>,
     pub allow_public: bool,
+    #[serde(default)]
+    pub clusters: Vec<ClusterConfig>,
+    
+    // Compute Loop
+    #[serde(default)]
+    pub enable_zombie_reaper: bool,
+    #[serde(default)]
+    pub enable_turbo_mode: bool,
+    #[serde(default)]
+    pub enable_bin_packing: bool,
+    #[serde(default)]
+    pub enable_flash_preemption: bool,
+    
+    // Storage/Net Loop
+    #[serde(default)]
+    pub enable_dataset_prefetch: bool,
+    #[serde(default)]
+    pub enable_bandwidth_reserve: bool,
+    #[serde(default)]
+    pub enable_fs_cleanup: bool,
+    #[serde(default)]
+    pub enable_thermal_management: bool,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct ClusterConfig {
+    pub name: String,
+    pub endpoints: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -45,6 +74,10 @@ pub struct DriverConfig {
 pub struct WasmSkillConfig {
     pub name: String,
     pub path: PathBuf,
+    pub signature: Option<String>,
+    pub public_key: Option<String>,
+    #[serde(default)]
+    pub capabilities: crate::skills::wasm_runtime::SkillCapabilities,
     #[serde(default)]
     pub params: HashMap<String, String>,
 }
@@ -55,6 +88,15 @@ impl Default for OrchestratorConfig {
             enabled: false,
             token: None,
             allow_public: false,
+            clusters: vec![],
+            enable_zombie_reaper: true,
+            enable_turbo_mode: false,
+            enable_bin_packing: false,
+            enable_flash_preemption: false,
+            enable_dataset_prefetch: false,
+            enable_bandwidth_reserve: false,
+            enable_fs_cleanup: false,
+            enable_thermal_management: false,
         }
     }
 }
@@ -91,6 +133,10 @@ impl LogLevel {
 pub struct AgentConfig {
     /// Metadata tags identifying this agent (e.g., env=prod, region=us-east).
     pub tags: HashMap<String, String>,
+
+    /// Operational mode (Prod, Dev, Demo)
+    #[serde(default)]
+    pub mode: RunMode,
 
     /// The interval between metric collection scrapes.
     /// Default: 100ms. High-frequency telemetry (10ms) requires kernel tuning.
@@ -134,6 +180,10 @@ pub struct AgentConfig {
     pub local_tsdb_retention_hours: u64,
     pub local_tsdb_max_disk_mb: u64,
 
+    // Persistence Layer
+    pub database_url: Option<String>,
+    pub enable_local_db: bool,
+
     // Control Plane
     pub orchestrator: Option<OrchestratorConfig>,
 
@@ -158,9 +208,18 @@ pub struct AgentConfig {
     pub log_level: LogLevel,
 }
 
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Default)]
+pub enum RunMode {
+    #[default]
+    Prod,
+    Dev,
+    Demo,
+}
+
 // Minimal ConfigOverrides struct for CLI merging
 #[derive(Debug, Deserialize, Serialize, Clone, Default)]
 pub struct ConfigOverrides {
+    pub mode: Option<RunMode>,
     pub listen_address: Option<String>,
     #[serde(default, with = "humantime_serde")]
     pub scrape_interval: Option<Duration>,
@@ -186,6 +245,8 @@ pub struct ConfigOverrides {
     pub local_tsdb_path: Option<String>,
     pub local_tsdb_retention_hours: Option<u64>,
     pub local_tsdb_max_disk_mb: Option<u64>,
+    pub database_url: Option<String>,
+    pub enable_local_db: Option<bool>,
     pub log_level: Option<LogLevel>,
     pub orchestrator: Option<OrchestratorConfig>,
     pub efficiency_profile_path: Option<PathBuf>,
@@ -203,6 +264,7 @@ impl Default for AgentConfig {
         
         Self {
             tags,
+            mode: RunMode::Prod, // Default to secure production unless specified
             scrape_interval: Duration::from_millis(100), // Fast 100ms default
             
             enable_cpu: true,
@@ -234,6 +296,9 @@ impl Default for AgentConfig {
             local_tsdb_path: "/tmp/sentinel_tsdb".to_string(),
             local_tsdb_retention_hours: 24,
             local_tsdb_max_disk_mb: 512,
+
+            database_url: None,
+            enable_local_db: false,
             
             orchestrator: None,
 
@@ -260,6 +325,24 @@ impl Default for AgentConfig {
 
 impl AgentConfig {
     pub fn apply_overrides(&mut self, overrides: ConfigOverrides) {
+        if let Some(v) = overrides.mode { self.mode = v; }
+        
+        // Mode-specific defaults (can still be overridden by CLI args)
+        match self.mode {
+            RunMode::Dev => {
+                if overrides.log_level.is_none() { self.log_level = LogLevel::Debug; }
+                if overrides.enable_local_db.is_none() { self.enable_local_db = true; }
+            },
+            RunMode::Demo => {
+                // In Demo mode, we simulate GPU data if not explicitly enabled
+                 if overrides.enable_gpu.is_none() { self.enable_gpu = false; }
+                 if overrides.enable_local_db.is_none() { self.enable_local_db = true; }
+            },
+            RunMode::Prod => {
+                 if overrides.log_level.is_none() { self.log_level = LogLevel::Info; }
+            }
+        }
+
         if let Some(v) = overrides.listen_address { self.listen_address = v; }
         if let Some(v) = overrides.scrape_interval { self.scrape_interval = v; }
         if let Some(v) = overrides.enable_cpu { self.enable_cpu = v; }
@@ -284,6 +367,8 @@ impl AgentConfig {
         if let Some(v) = overrides.local_tsdb_path { self.local_tsdb_path = v; }
         if let Some(v) = overrides.local_tsdb_retention_hours { self.local_tsdb_retention_hours = v; }
         if let Some(v) = overrides.local_tsdb_max_disk_mb { self.local_tsdb_max_disk_mb = v; }
+        if let Some(v) = overrides.database_url { self.database_url = Some(v); }
+        if let Some(v) = overrides.enable_local_db { self.enable_local_db = v; }
         if let Some(v) = overrides.log_level { self.log_level = v; }
         if let Some(v) = overrides.orchestrator { self.orchestrator = Some(v); }
         if let Some(v) = overrides.efficiency_profile_path { self.efficiency_profile_path = Some(v); }
