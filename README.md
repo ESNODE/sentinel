@@ -142,6 +142,7 @@ ESNODE Sentinel is designed for production reliability:
 - **Zero-Dependency Core:** Single static binary for easy deployment.
 - **WASM Isolation:** Third-party skills run in a secure sandbox.
 - **Enterprise-Grade TUI:** No browser needed for deep diagnostics.
+- **Security & Cloud Console:** Full [Security & Console Guide](./docs/SECURITY_CONSOLE.md) for HTTPS and SSO.
 - **Strategic Adoption:** Read our [Enterprise & Mega-Cap Strategy](./docs/enterprise/) for large-scale fleet integration.
 
 ---

@@ -1,0 +1,8 @@
+listen_address = "0.0.0.0:9100"
+scrape_interval_seconds = 5
+enable_cpu = true
+enable_memory = true
+enable_disk = true
+enable_network = true
+enable_gpu = true
+log_level = "info"

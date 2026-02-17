@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel | Cloud Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #141416;
+            --bg-sidebar: #111112;
+            --accent-cyan: #00f5ff;
+            --accent-purple: #9d00ff;
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --border: #2c2c2e;
+            --card-bg: rgba(28, 28, 30, 0.7);
+            --success: #32d74b;
+            --warning: #ff9f0a;
+            --danger: #ff453a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            padding: 0 24px 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-group {
+            margin-bottom: 24px;
+        }
+
+        .nav-label {
+            padding: 0 24px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 24px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-item.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 245, 255, 0.05);
+            border-left-color: var(--accent-cyan);
+        }
+
+        .nav-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Header Styles */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            height: 64px;
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .search-bar {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 400px;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            width: 100%;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .action-icon {
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .action-icon:hover {
+            color: var(--text-primary);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            background: radial-gradient(circle at top right, rgba(0, 245, 255, 0.03), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(157, 0, 255, 0.03), transparent 40%);
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .page-title h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Grid System */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 245, 255, 0.3);
+        }
+
+        .card-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-trend {
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        /* Chart Area */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .chart-card {
+            min-height: 400px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            gap: 10px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--accent-cyan), transparent);
+            border-radius: 4px;
+            transition: height 1s ease;
+        }
+
+        /* Activity Table */
+        .activity-card {
+            grid-column: span 2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(50, 215, 75, 0.1);
+            color: var(--success);
+        }
+
+        .status-warning {
+            background: rgba(255, 159, 10, 0.1);
+            color: var(--warning);
+        }
+
+        .status-danger {
+            background: rgba(255, 69, 58, 0.1);
+            color: var(--danger);
+        }
+
+        /* Animations */
+        @keyframes pulse-cyan {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 245, 255, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 245, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 245, 255, 0);
+            }
+        }
+
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: pulse-cyan 2s infinite;
+        }
+    </style>
+    <title>ESNODE Sentinel | Autonomic AI Infrastructure</title>
+    <meta name="description"
+        content="ESNODE Sentinel: High-performance, GPU-aware observability and autonomic infrastructure control.">
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="logo-container">
+            <i data-lucide="shield" style="color: var(--accent-cyan); width: 32px; height: 32px;"></i>
+            <div style="display: flex; flex-direction: column; line-height: 1.1;">
+                <span
+                    style="font-size: 11px; font-weight: 800; color: var(--text-secondary); letter-spacing: 1.5px; margin-bottom: -2px;">ESNODE</span>
+                <span class="logo-text" style="font-size: 22px;">SENTINEL</span>
+            </div>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-label">Infrastructure</div>
+            <a href="#" class="nav-item active"><i data-lucide="layout-dashboard"></i>Overview</a>
+            <a href="#" class="nav-item"><i data-lucide="server"></i>GPU Clusters</a>
+            <a href="#" class="nav-item"><i data-lucide="zap"></i>Power & PUE</a>
+            <a href="#" class="nav-item"><i data-lucide="network"></i>Topology</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-label">Intelligence</div>
+            <a href="#" class="nav-item"><i data-lucide="brain-circuit"></i>Skill Library</a>
+            <a href="#" class="nav-item"><i data-lucide="activity"></i>Root Cause Analysis</a>
+            <a href="#" class="nav-item"><i data-lucide="bar-chart-3"></i>Efficiency Insights</a>
+        </div>
+
+        <div class="nav-group">
+            <div class="nav-label">Settings</div>
+            <a href="#" class="nav-item"><i data-lucide="settings"></i>Configuration</a>
+            <a href="#" class="nav-item"><i data-lucide="users"></i>Team Access</a>
+            <a href="#" class="nav-item"><i data-lucide="key"></i>API Keys</a>
+        </div>
+
+        <div style="margin-top: auto; padding: 0 24px;">
+            <div class="card" style="padding: 12px; background: rgba(255,255,255,0.03);">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div
+                        style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));">
+                    </div>
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600;">AI Operator</div>
+                        <div style="font-size: 11px; color: var(--text-secondary);">Enterprise Tier</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-container">
+        <header>
+            <div class="search-bar">
+                <i data-lucide="search" size="16"></i>
+                <input type="text" placeholder="Search clusters, skills, or metrics...">
+            </div>
+            <div class="header-actions">
+                <i data-lucide="bell" class="action-icon"></i>
+                <i data-lucide="help-circle" class="action-icon"></i>
+                <div style="width: 1px; height: 24px; background: var(--border);"></div>
+                <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <span style="font-size: 14px; font-weight: 500;">us-east-1</span>
+                    <i data-lucide="chevron-down" size="14"></i>
+                </div>
+            </div>
+        </header>
+
+        <main class="content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>Sensing Overview</h1>
+                    <p>Real-time autonomous observability for Global Cluster A-100</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="live-indicator"></div>
+                    <span
+                        style="font-size: 12px; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Live
+                        Telemetry</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="card">
+                    <div class="card-label">Global PUE <i data-lucide="info" size="14"></i></div>
+                    <div class="card-value">1.07</div>
+                    <div class="card-trend trend-up"><i data-lucide="trending-down"></i> -2.4% vs last week</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">GPU Utilization <i data-lucide="cpu" size="14"></i></div>
+                    <div class="card-value">94.2%</div>
+                    <div class="card-trend trend-up"><i data-lucide="trending-up"></i> +1.2% active</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">Avg Thermal <i data-lucide="thermometer" size="14"></i></div>
+                    <div class="card-value">42°C</div>
+                    <div class="card-trend" style="color: var(--text-secondary);">Steady state</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">Active Skills <i data-lucide="zap" size="14"></i></div>
+                    <div class="card-value">12</div>
+                    <div class="card-trend trend-up">4 auto-recovering</div>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <div style="font-size: 16px; font-weight: 600;">Power Flux Distribution</div>
+                        <div style="display: flex; gap: 12px;">
+                            <span style="font-size: 12px; color: var(--accent-cyan);">● Cluster A</span>
+                            <span style="font-size: 12px; color: var(--accent-purple);">● Cluster B</span>
+                        </div>
+                    </div>
+                    <div class="chart-placeholder" id="powerChart">
+                        <!-- Bars injected by JS -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="chart-header">
+                        <div style="font-size: 16px; font-weight: 600;">Skill Efficiency</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="skill-meter">
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                                <span>Liquid-Tune PID</span>
+                                <span style="color: var(--success);">Optimal</span>
+                            </div>
+                            <div
+                                style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                                <div style="width: 88%; height: 100%; background: var(--accent-cyan);"></div>
+                            </div>
+                        </div>
+                        <div class="skill-meter">
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                                <span>Fan-Watchdog</span>
+                                <span style="color: var(--success);">82% saved</span>
+                            </div>
+                            <div
+                                style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                                <div style="width: 82%; height: 100%; background: var(--accent-purple);"></div>
+                            </div>
+                        </div>
+                        <div class="skill-meter">
+                            <div
+                                style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                                <span>Eco-Shifter</span>
+                                <span style="color: var(--warning);">Throttling prevented</span>
+                            </div>
+                            <div
+                                style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden;">
+                                <div style="width: 65%; height: 100%; background: var(--warning);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card activity-card">
+                    <div class="chart-header">
+                        <div style="font-size: 18px; font-weight: 600;">Autonomous Activity Log</div>
+                        <button
+                            style="background: none; border: 1px solid var(--border); color: var(--text-primary); padding: 4px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">Export
+                            CSV</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event ID</th>
+                                <th>Timestamp</th>
+                                <th>Category</th>
+                                <th>Intelligence Action</th>
+                                <th>Impact</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-cyan);">RCA-4421</td>
+                                <td>2 min ago</td>
+                                <td>Thermal</td>
+                                <td>Detected GPU 0 Throttling; Auto-adjusted cold plate flow.</td>
+                                <td style="color: var(--success);">-3.2°C</td>
+                                <td><span class="status-pill status-active">Resolved</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-cyan);">PWR-9982</td>
+                                <td>15 min ago</td>
+                                <td>Efficiency</td>
+                                <td>Switched Cluster B to Eco-Mode during grid peak.</td>
+                                <td style="color: var(--success);">-45kW</td>
+                                <td><span class="status-pill status-active">Executing</span></td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: monospace; color: var(--accent-cyan);">HW-0012</td>
+                                <td>1 hour ago</td>
+                                <td>Predictive</td>
+                                <td>ECC error spike on H100-Rack-4; Predicted failure 88%.</td>
+                                <td style="color: var(--warning);">Pre-empted</td>
+                                <td><span class="status-pill status-warning">Alerted</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Simple Chart Visualization
+        const chart = document.getElementById('powerChart');
+        for (let i = 0; i < 20; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            const h = Math.random() * 80 + 20;
+            bar.style.height = '0%';
+            chart.appendChild(bar);
+
+            setTimeout(() => {
+                bar.style.height = h + '%';
+                bar.style.opacity = (h / 100);
+            }, i * 50);
+        }
+
+        // Live update mock values
+        setInterval(() => {
+            const val = (94.2 + (Math.random() - 0.5)).toFixed(1);
+            document.querySelectorAll('.card-value')[1].innerText = val + '%';
+        }, 3000);
+    </script>
+</body>
+
+</html>

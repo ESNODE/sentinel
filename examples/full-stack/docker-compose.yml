@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   sentinel:
-    image: ghcr.io/esnode/sentinel:latest
+    build:
+      context: ../../
+      dockerfile: Dockerfile
     container_name: sentinel
     network_mode: "host"
     pid: "host"

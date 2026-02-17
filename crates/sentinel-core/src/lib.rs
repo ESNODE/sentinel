@@ -13,6 +13,7 @@ pub mod predictive;
 pub mod rca;
 pub mod state;
 pub mod tsdb;
+pub mod auth;
 pub mod skills;
 
 use std::sync::{
@@ -579,6 +580,7 @@ impl Agent {
             orchestrator_allow_public: config.orchestrator.as_ref().is_some_and(|o| o.allow_public),
             listen_is_loopback: listen_is_loopback(&config.listen_address),
             orchestrator_token: config.orchestrator.as_ref().and_then(|o| o.token.clone()),
+            security: config.security.clone(),
         };
         let router = build_router(http_state);
         let http_task = serve(&config.listen_address, router)

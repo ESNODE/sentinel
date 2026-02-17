@@ -27,6 +27,7 @@ pub struct HttpState {
     pub orchestrator_allow_public: bool,
     pub listen_is_loopback: bool,
     pub orchestrator_token: Option<String>,
+    pub security: crate::config::SecurityConfig,
 }
 
 pub fn build_router(state: HttpState) -> Router {
@@ -36,7 +37,13 @@ pub fn build_router(state: HttpState) -> Router {
         .route("/status", get(status_handler))
         .route("/v1/status", get(status_handler))
         .route("/events", get(events_handler))
-        .route("/tsdb/export", get(tsdb_export_handler));
+        .route("/tsdb/export", get(tsdb_export_handler))
+        .route("/api/auth/login", axum::routing::post(login_handler))
+        .route("/api/auth/sso/callback", get(crate::auth::oidc_callback));
+
+    // Serve the ESNODE Sentinel Cloud Console
+    let console_dir = std::env::var("SENTINEL_CONSOLE_DIR").unwrap_or_else(|_| "./public/console".to_string());
+    router = router.nest_service("/", tower_http::services::ServeDir::new(console_dir));
 
     if let Some(orch_state) = &state.orchestrator {
         if state.orchestrator_allow_public || state.listen_is_loopback {
@@ -89,10 +96,6 @@ async fn health_handler(State(state): State<HttpState>) -> impl IntoResponse {
     }
 }
 
-async fn status_handler(State(state): State<HttpState>) -> impl IntoResponse {
-    let snapshot = state.status.snapshot();
-    Json(snapshot)
-}
 
 async fn events_handler(
     State(state): State<HttpState>,
@@ -110,6 +113,27 @@ async fn events_handler(
     });
 
     Sse::new(stream).keep_alive(axum::response::sse::KeepAlive::default())
+}
+
+async fn login_handler(
+    State(state): State<HttpState>,
+    Json(payload): Json<serde_json::Value>,
+) -> impl IntoResponse {
+    // Basic auth implementation
+    if !state.security.enable_auth {
+        return (StatusCode::OK, Json(serde_json::json!({"access_token": "esnode-dev-token", "token_type": "Bearer"}))).into_response();
+    }
+    
+    // In production, verify user credentials against a DB or SSO provider
+    StatusCode::UNAUTHORIZED.into_response()
+}
+
+async fn status_handler(
+    State(state): State<HttpState>,
+    _user: crate::auth::AuthenticatedUser, // Auth Guard
+) -> impl IntoResponse {
+    let snapshot = state.status.snapshot();
+    Json(snapshot)
 }
 
 #[derive(Debug, serde::Deserialize)]

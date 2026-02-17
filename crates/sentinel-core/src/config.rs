@@ -11,6 +11,28 @@ pub struct OrchestratorConfig {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct SecurityConfig {
+    pub enable_https: bool,
+    pub cert_path: Option<PathBuf>,
+    pub key_path: Option<PathBuf>,
+    pub enable_auth: bool,
+    pub sso_provider: Option<SsoProvider>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(tag = "type")]
+pub enum SsoProvider {
+    Oidc {
+        issuer_url: String,
+        client_id: String,
+        client_secret: String,
+    },
+    Saml {
+        metadata_url: String,
+    },
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverConfig {
     pub protocol: String, // "modbus", "dnp3", "snmp"
     pub id: String,
@@ -114,6 +136,9 @@ pub struct AgentConfig {
 
     // Control Plane
     pub orchestrator: Option<OrchestratorConfig>,
+
+    // Security & Console
+    pub security: SecurityConfig,
     
     // Policy / Enforcement
     pub efficiency_profile_path: Option<PathBuf>,
@@ -211,6 +236,14 @@ impl Default for AgentConfig {
             local_tsdb_max_disk_mb: 512,
             
             orchestrator: None,
+
+            security: SecurityConfig {
+                enable_https: false,
+                cert_path: None,
+                key_path: None,
+                enable_auth: false,
+                sso_provider: None,
+            },
             
             efficiency_profile_path: None,
             enforcement_mode: EnforcementMode::Monitor,
