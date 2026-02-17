@@ -31,6 +31,12 @@
   <h3>The "WASM Magic": Polyglot Extensibility</h3>
   <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/wasm-magic.png" alt="Sentinel WASM Magic" width="800"/>
   <p><i>Build a Skill in <b>Python, JavaScript, TypeScript, Rust, Go, C++, C#, Java</b>, or <b>Kotlin</b>. Compile to WASM and see it live instantly.</i></p>
+
+  <br/>
+
+  <h3>The "Command Center": ESNODE Sentinel Cloud Console</h3>
+  <img src="https://raw.githubusercontent.com/ESNODE/sentinel/main/docs/images/sentinel-modern-dashboard.png" alt="ESNODE Sentinel Cloud Console" width="800"/>
+  <p><i>A unified, enterprise-grade interface for managing global GPU clusters, thermal topology, and autonomous security.</i></p>
 </div>
 
 ---
