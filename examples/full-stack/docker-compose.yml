@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  sentinel:
+    image: ghcr.io/esnode/sentinel:latest
+    container_name: sentinel
+    network_mode: "host"
+    pid: "host"
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - /dev:/dev
+      - ./sentinel.toml:/etc/sentinel/sentinel.toml
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    restart: unless-stopped

@@ -35,6 +35,31 @@
 
 ---
 
+## ⚡ 60-Second Full Stack Demo
+
+Experience the full power of Sentinel + Prometheus + Grafana with a single command.
+
+```bash
+# Launch the full stack: Sentinel + Prometheus + Grafana
+docker compose -f examples/full-stack/docker-compose.yml up -d
+```
+
+**What happens?**
+1.  **Sentinel** starts sensing your host (GPU, CPU, Power).
+2.  **Prometheus** begins scraping Sentinel every 5s.
+3.  **Grafana** is provisioned with an automatic datasource.
+4.  **Visit**: [http://localhost:3000](http://localhost:3000) (Admin/Admin) to see your real-time AI infra health.
+
+---
+
+## 🔭 The Vision
+
+Sentinel is not just a tool; it is a movement toward **Autonomic AI Infrastructure**. Read our clear vision for the next era of computing:
+
+👉 [**Sentinel Vision 2026: The Sentience Layer**](./docs/VISION_2026.md)
+
+---
+
 ## Watch over your AI Fleet
 
 ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-built for the scale and thermal complexity of modern AI infrastructure. It transforms raw hardware telemetry into **Actionable Sentience**.
@@ -49,6 +74,7 @@ ESNODE Sentinel is a high-performance, GPU-aware observability agent purpose-bui
 ---
 
 ## The WASM Skills Gallery
+
 Traditional agents are rigid. Sentinel is a living organism. Extensions are **Polyglot**—write in your language of choice and compile to **WebAssembly**.
 
 | Skill | Category | Capability | Viral Factor |
@@ -64,7 +90,7 @@ Traditional agents are rigid. Sentinel is a living organism. Extensions are **Po
 
 ## 🛠️ Quick Start
 
-Launch the Sentinel with a single command:
+Launch Sentinel with a single command:
 
 ```bash
 # Clone the repository
@@ -103,12 +129,20 @@ Sentinel exports a rich Prometheus-compatible metrics stream at `:9100/metrics` 
 
 ---
 
+<div align="center">
+  <p>Built for the scale of tomorrow. 🦅</p>
+  <p>ESNODE | Source Available BUSL-1.1 | Copyright (c) 2024 Estimatedstocks AB</p>
+</div>
+
+---
+
 ## 🏛️ Architecture & Enterprise
 
 ESNODE Sentinel is designed for production reliability:
 - **Zero-Dependency Core:** Single static binary for easy deployment.
 - **WASM Isolation:** Third-party skills run in a secure sandbox.
 - **Enterprise-Grade TUI:** No browser needed for deep diagnostics.
+- **Strategic Adoption:** Read our [Enterprise & Mega-Cap Strategy](./docs/enterprise/) for large-scale fleet integration.
 
 ---
 
