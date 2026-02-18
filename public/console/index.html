@@ -1241,8 +1241,8 @@
             const dbConfig = {
                 database_url: document.getElementById('db_url').value || null,
                 enable_local_db: document.getElementById('db_enable_local').checked,
-                max_connections: parseInt(document.getElementById('db_max_conn').value),
-                idle_timeout_secs: parseInt(document.getElementById('db_idle_timeout').value)
+                max_connections: parseInt(document.getElementById('db_max_conn').value) || 10,
+                idle_timeout_secs: parseInt(document.getElementById('db_idle_timeout').value) || 300
             };
 
             try {

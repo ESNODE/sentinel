@@ -30,6 +30,8 @@ fn overrides_apply_all_booleans_and_scalars() {
         local_tsdb_retention_hours: Some(12),
         local_tsdb_max_disk_mb: Some(321),
         node_power_envelope_watts: Some(456.0),
+        database_url: Some("postgres://dummy".to_string()),
+        enable_local_db: Some(false),
         ..Default::default()
     };
 
@@ -57,6 +59,7 @@ fn overrides_apply_all_booleans_and_scalars() {
     assert_eq!(base.local_tsdb_path, "/tmp/tsdb");
     assert_eq!(base.local_tsdb_retention_hours, 12);
     assert_eq!(base.local_tsdb_max_disk_mb, 321);
-
     assert_eq!(base.node_power_envelope_watts, Some(456.0));
+    assert_eq!(base.database.database_url, Some("postgres://dummy".to_string()));
+    assert!(!base.database.enable_local_db);
 }

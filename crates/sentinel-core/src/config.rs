@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Duration;
 
-#[derive(Debug, Deserialize, Serialize, Clone, Default)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DatabaseConfig {
     pub database_url: Option<String>,
     pub enable_local_db: bool,
@@ -11,6 +11,17 @@ pub struct DatabaseConfig {
     pub max_connections: u32,
     #[serde(default = "default_idle_timeout")]
     pub idle_timeout_secs: u64,
+}
+
+impl Default for DatabaseConfig {
+    fn default() -> Self {
+        Self {
+            database_url: None,
+            enable_local_db: true,
+            max_connections: 10,
+            idle_timeout_secs: 300,
+        }
+    }
 }
 
 fn default_max_connections() -> u32 { 10 }
@@ -405,4 +416,50 @@ pub fn load_config(path: Option<PathBuf>) -> Result<AgentConfig, config::ConfigE
     builder.add_source(config::File::with_name("sentinel").required(false))
            .build()?
            .try_deserialize()
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_default_config() {
+        let config = AgentConfig::default();
+        assert_eq!(config.database.max_connections, 10);
+        assert_eq!(config.database.enable_local_db, true);
+        assert_eq!(config.database.database_url, None);
+    }
+
+    #[test]
+    fn test_apply_overrides_database() {
+        let mut config = AgentConfig::default();
+        let overrides = ConfigOverrides {
+            database_url: Some("postgres://test".to_string()),
+            enable_local_db: Some(false),
+            ..Default::default()
+        };
+
+        config.apply_overrides(overrides);
+        assert_eq!(config.database.database_url, Some("postgres://test".to_string()));
+        assert_eq!(config.database.enable_local_db, false);
+    }
+
+    #[test]
+    fn test_mode_defaults() {
+        let mut config = AgentConfig::default();
+        // Dev mode should have database enabled by default
+        let overrides = ConfigOverrides {
+            mode: Some(crate::config::RunMode::Dev),
+            ..Default::default()
+        };
+        config.apply_overrides(overrides);
+        assert_eq!(config.database.enable_local_db, true);
+
+        let mut config_demo = AgentConfig::default();
+        let overrides_demo = ConfigOverrides {
+            mode: Some(crate::config::RunMode::Demo),
+            ..Default::default()
+        };
+        config_demo.apply_overrides(overrides_demo);
+        assert_eq!(config_demo.database.enable_local_db, true);
+    }
 }
