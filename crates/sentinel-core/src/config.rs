@@ -3,6 +3,19 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::time::Duration;
 
+#[derive(Debug, Deserialize, Serialize, Clone, Default)]
+pub struct DatabaseConfig {
+    pub database_url: Option<String>,
+    pub enable_local_db: bool,
+    #[serde(default = "default_max_connections")]
+    pub max_connections: u32,
+    #[serde(default = "default_idle_timeout")]
+    pub idle_timeout_secs: u64,
+}
+
+fn default_max_connections() -> u32 { 10 }
+fn default_idle_timeout() -> u64 { 300 }
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[allow(clippy::struct_excessive_bools)]
 pub struct OrchestratorConfig {
@@ -181,8 +194,7 @@ pub struct AgentConfig {
     pub local_tsdb_max_disk_mb: u64,
 
     // Persistence Layer
-    pub database_url: Option<String>,
-    pub enable_local_db: bool,
+    pub database: DatabaseConfig,
 
     // Control Plane
     pub orchestrator: Option<OrchestratorConfig>,
@@ -297,8 +309,7 @@ impl Default for AgentConfig {
             local_tsdb_retention_hours: 24,
             local_tsdb_max_disk_mb: 512,
 
-            database_url: None,
-            enable_local_db: false,
+            database: DatabaseConfig::default(),
             
             orchestrator: None,
 
@@ -331,12 +342,12 @@ impl AgentConfig {
         match self.mode {
             RunMode::Dev => {
                 if overrides.log_level.is_none() { self.log_level = LogLevel::Debug; }
-                if overrides.enable_local_db.is_none() { self.enable_local_db = true; }
+                if overrides.enable_local_db.is_none() { self.database.enable_local_db = true; }
             },
             RunMode::Demo => {
                 // In Demo mode, we simulate GPU data if not explicitly enabled
                  if overrides.enable_gpu.is_none() { self.enable_gpu = false; }
-                 if overrides.enable_local_db.is_none() { self.enable_local_db = true; }
+                 if overrides.enable_local_db.is_none() { self.database.enable_local_db = true; }
             },
             RunMode::Prod => {
                  if overrides.log_level.is_none() { self.log_level = LogLevel::Info; }
@@ -367,8 +378,8 @@ impl AgentConfig {
         if let Some(v) = overrides.local_tsdb_path { self.local_tsdb_path = v; }
         if let Some(v) = overrides.local_tsdb_retention_hours { self.local_tsdb_retention_hours = v; }
         if let Some(v) = overrides.local_tsdb_max_disk_mb { self.local_tsdb_max_disk_mb = v; }
-        if let Some(v) = overrides.database_url { self.database_url = Some(v); }
-        if let Some(v) = overrides.enable_local_db { self.enable_local_db = v; }
+        if let Some(v) = overrides.database_url { self.database.database_url = Some(v); }
+        if let Some(v) = overrides.enable_local_db { self.database.enable_local_db = v; }
         if let Some(v) = overrides.log_level { self.log_level = v; }
         if let Some(v) = overrides.orchestrator { self.orchestrator = Some(v); }
         if let Some(v) = overrides.efficiency_profile_path { self.efficiency_profile_path = Some(v); }

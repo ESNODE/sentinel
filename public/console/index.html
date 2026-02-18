@@ -359,6 +359,145 @@
             border-radius: 50%;
             animation: pulse-cyan 2s infinite;
         }
+
+        /* Settings Page Styles */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .settings-section {
+            margin-bottom: 32px;
+        }
+
+        .settings-section h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .setting-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-cyan);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Input Styles */
+        .settings-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .settings-input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .action-btn {
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        #settings-status {
+            font-size: 13px;
+            color: var(--success);
+            font-weight: 600;
+            display: none;
+        }
     </style>
     <title>ESNODE Sentinel | Autonomic AI Infrastructure</title>
     <meta name="description"
@@ -646,6 +785,136 @@
         </div>
     </div>
 
+    <!-- Settings Page -->
+    <div id="page-settings" class="page-content" style="display: none;">
+        <div class="settings-grid">
+            <!-- Orchestrator Settings -->
+            <div class="card">
+                <div class="settings-section">
+                    <h3><i data-lucide="cpu"></i> Compute Loop (Autonomous)</h3>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Zombie Reaper</span>
+                            <span class="setting-desc">Automatically terminate stalled or orphaned GPU workloads</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="enable_zombie_reaper">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Turbo Mode</span>
+                            <span class="setting-desc">Aggressively scale performance based on thermal overhead</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="enable_turbo_mode">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Predictive Bin Packing</span>
+                            <span class="setting-desc">Optimize VRAM utilization across multi-tenant nodes</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="enable_bin_packing">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Flash Preemption</span>
+                            <span class="setting-desc">Trigger sub-millisecond task suspension for priority tasks</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="enable_flash_preemption">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3><i data-lucide="network"></i> Storage & Net Loop</h3>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Dataset Prefetch</span>
+                            <span class="setting-desc">Pre-cache training batches based on epoch timeline</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="enable_dataset_prefetch">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Bandwidth Reservation</span>
+                            <span class="setting-desc">Dynamic InfiniBand priority for cluster sync</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="enable_bandwidth_reserve">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database & Persistence Settings -->
+            <div class="card">
+                <div class="settings-section">
+                    <h3><i data-lucide="database"></i> Persistence Layer</h3>
+                    <div class="setting-row" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+                        <div class="setting-info">
+                            <span class="setting-label">Database URL (PostgreSQL / Timescale)</span>
+                            <span class="setting-desc">External database connection string for telemetry
+                                persistence</span>
+                        </div>
+                        <input type="text" id="db_url" class="settings-input"
+                            placeholder="postgres://user:pass@host:5432/db">
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="setting-info">
+                            <span class="setting-label">Enable Local SQLite DB</span>
+                            <span class="setting-desc">Use embedded storage if external DB is unavailable</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="db_enable_local">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+                        <div class="setting-info">
+                            <span class="setting-label">Max Connections</span>
+                            <input type="number" id="db_max_conn" class="settings-input" value="10">
+                        </div>
+                        <div class="setting-info">
+                            <span class="setting-label">Idle Timeout (s)</span>
+                            <input type="number" id="db_idle_timeout" class="settings-input" value="300">
+                        </div>
+                    </div>
+
+                    <div
+                        style="margin-top: 24px; padding: 12px; background: rgba(255,159,10,0.1); border-radius: 8px; border-left: 3px solid var(--warning);">
+                        <div
+                            style="font-size: 12px; color: var(--warning); display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="alert-triangle" size="14"></i>
+                            Changes requiring connection pool updates take effect on agent restart.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; display: flex; align-items: center; gap: 20px;">
+                    <button class="action-btn" onclick="saveSettings()">
+                        <i data-lucide="save"></i> Save All Settings
+                    </button>
+                    <span id="settings-status">Configuration saved successfully!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Topology Page -->
     <div id="page-topology" class="page-content" style="display: none;">
         <div class="card" style="min-height: 600px;">
@@ -915,12 +1184,12 @@
         // --- Settings Management ---
         async function loadSettings() {
             try {
-                const res = await fetch('/orchestrator/config', {
+                // Load Orchestrator Settings
+                const orchRes = await fetch('/orchestrator/config', {
                     headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
                 });
-                if (res.ok) {
-                    const config = await res.json();
-
+                if (orchRes.ok) {
+                    const config = await orchRes.json();
                     const map = {
                         'enable_zombie_reaper': config.enable_zombie_reaper,
                         'enable_turbo_mode': config.enable_turbo_mode,
@@ -937,44 +1206,66 @@
                         if (el) el.checked = val;
                     }
                 }
+
+                // Load Database Settings
+                const dbRes = await fetch('/api/config/database', {
+                    headers: { 'Authorization': `Bearer ${AUTH_TOKEN}` }
+                });
+                if (dbRes.ok) {
+                    const dbConfig = await dbRes.json();
+                    if (document.getElementById('db_url')) document.getElementById('db_url').value = dbConfig.database_url || '';
+                    if (document.getElementById('db_enable_local')) document.getElementById('db_enable_local').checked = dbConfig.enable_local_db;
+                    if (document.getElementById('db_max_conn')) document.getElementById('db_max_conn').value = dbConfig.max_connections;
+                    if (document.getElementById('db_idle_timeout')) document.getElementById('db_idle_timeout').value = dbConfig.idle_timeout_secs;
+                }
             } catch (e) {
                 console.error("Failed to load settings", e);
             }
         }
 
         async function saveSettings() {
-            const config = {
+            const orchConfig = {
                 enabled: true,
                 token: null,
                 allow_public: false,
-
                 enable_zombie_reaper: document.getElementById('enable_zombie_reaper').checked,
                 enable_turbo_mode: document.getElementById('enable_turbo_mode').checked,
                 enable_bin_packing: document.getElementById('enable_bin_packing').checked,
                 enable_flash_preemption: document.getElementById('enable_flash_preemption').checked,
-
                 enable_dataset_prefetch: document.getElementById('enable_dataset_prefetch').checked,
                 enable_bandwidth_reserve: document.getElementById('enable_bandwidth_reserve').checked,
                 enable_fs_cleanup: document.getElementById('enable_fs_cleanup').checked,
                 enable_thermal_management: document.getElementById('enable_thermal_management').checked,
             };
 
+            const dbConfig = {
+                database_url: document.getElementById('db_url').value || null,
+                enable_local_db: document.getElementById('db_enable_local').checked,
+                max_connections: parseInt(document.getElementById('db_max_conn').value),
+                idle_timeout_secs: parseInt(document.getElementById('db_idle_timeout').value)
+            };
+
             try {
-                const res = await fetch('/orchestrator/config', {
+                // Save Orchestrator
+                const orchRes = await fetch('/orchestrator/config', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${AUTH_TOKEN}`
-                    },
-                    body: JSON.stringify(config)
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}` },
+                    body: JSON.stringify(orchConfig)
                 });
 
-                if (res.ok) {
+                // Save Database
+                const dbRes = await fetch('/api/config/database', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}` },
+                    body: JSON.stringify(dbConfig)
+                });
+
+                if (orchRes.ok && dbRes.ok) {
                     const statusEl = document.getElementById('settings-status');
-                    statusEl.style.display = 'block';
+                    statusEl.style.display = 'inline';
                     setTimeout(() => statusEl.style.display = 'none', 3000);
                 } else {
-                    alert('Failed to save configuration.');
+                    alert('Failed to save some configuration settings.');
                 }
             } catch (e) {
                 console.error("Save failed", e);

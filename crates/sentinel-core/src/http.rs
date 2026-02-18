@@ -29,6 +29,7 @@ pub struct HttpState {
     pub orchestrator_token: Option<String>,
     pub security: crate::config::SecurityConfig,
     pub storage: std::sync::Arc<crate::storage::Storage>,
+    pub database_config: Arc<parking_lot::RwLock<crate::config::DatabaseConfig>>,
 }
 
 pub fn build_router(state: HttpState) -> Router {
@@ -48,6 +49,10 @@ pub fn build_router(state: HttpState) -> Router {
     // Serve the ESNODE Sentinel Cloud Console
     let console_dir = std::env::var("SENTINEL_CONSOLE_DIR").unwrap_or_else(|_| "./public/console".to_string());
     router = router.nest_service("/", tower_http::services::ServeDir::new(console_dir));
+
+    // Database Configuration Endpoints
+    router = router
+        .route("/api/config/database", get(get_database_config_handler).post(update_database_config_handler));
 
     if let Some(orch_state) = &state.orchestrator {
         if state.orchestrator_allow_public || state.listen_is_loopback {
@@ -237,4 +242,39 @@ async fn tsdb_export_handler(
             StatusCode::INTERNAL_SERVER_ERROR.into_response()
         }
     }
+}
+
+async fn get_database_config_handler(
+    State(state): State<HttpState>,
+    user: crate::auth::AuthenticatedUser,
+) -> impl IntoResponse {
+    if let Err(e) = crate::auth::require_permission(&user, crate::auth::Permission::ManageOrchestrator) {
+        return e;
+    }
+    let config = state.database_config.read();
+    Json((*config).clone()).into_response()
+}
+
+async fn update_database_config_handler(
+    State(state): State<HttpState>,
+    user: crate::auth::AuthenticatedUser,
+    Json(new_config): Json<crate::config::DatabaseConfig>,
+) -> impl IntoResponse {
+    if let Err(e) = crate::auth::require_permission(&user, crate::auth::Permission::ManageOrchestrator) {
+        return e;
+    }
+
+    {
+        let mut config = state.database_config.write();
+        *config = new_config;
+    }
+
+    info!(
+        target: "audit",
+        action = "database_config_updated",
+        user = ?user.user_id,
+        role = ?user.role
+    );
+
+    (StatusCode::OK, "Database configuration updated (Effect on restart for connection parameters)").into_response()
 }
