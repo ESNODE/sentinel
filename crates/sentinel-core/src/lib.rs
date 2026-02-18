@@ -664,6 +664,7 @@ impl Agent {
             orchestrator_token: config.orchestrator.as_ref().and_then(|o| o.token.clone()),
             security: config.security.clone(),
             storage: storage.clone(),
+            database_config: Arc::new(parking_lot::RwLock::new(config.database.clone())),
         };
         let router = build_router(http_state);
         let http_task = serve(&config.listen_address, router)

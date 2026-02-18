@@ -19,10 +19,10 @@ pub struct Storage {
 impl Storage {
     pub async fn new(config: &AgentConfig) -> Result<Self> {
         // 1. Try PostgreSQL / TimescaleDB if URL provided
-        if let Some(url) = &config.database_url {
+        if let Some(url) = &config.database.database_url {
             tracing::info!("Storage: Connecting to PostgreSQL/Timescale at configured URL...");
             let pool = sqlx::postgres::PgPoolOptions::new()
-                .max_connections(20)
+                .max_connections(config.database.max_connections)
                 .connect(url).await
                 .context("Failed to connect to PostgreSQL")?;
             
@@ -51,7 +51,7 @@ impl Storage {
         }
 
         // 2. Default: SQLite (Embedded)
-        if config.enable_local_db {
+        if config.database.enable_local_db {
             let path = format!("sqlite://{}/sentinel.db?mode=rwc", config.local_tsdb_path);
             tracing::info!("Storage: Initializing embedded SQLite DB at {}", path);
             
